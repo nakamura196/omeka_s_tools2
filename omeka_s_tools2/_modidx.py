@@ -5,6 +5,5 @@ d = { 'settings': { 'branch': 'main',
                 'doc_host': 'https://nakamura196.github.io',
                 'git_url': 'https://github.com/nakamura196/omeka_s_tools2',
                 'lib_path': 'omeka_s_tools2'},
-  'syms': { 'omeka_s_tools2.core': { 'omeka_s_tools2.core.foo': ('core.html#foo', 'omeka_s_tools2/core.py'),
-                                     'omeka_s_tools2.core.foo2': ('core.html#foo2', 'omeka_s_tools2/core.py'),
-                                     'omeka_s_tools2.core.foo3': ('core.html#foo3', 'omeka_s_tools2/core.py')}}}
+  'syms': { 'omeka_s_tools2.api': {'omeka_s_tools2.api.foo': ('api.html#foo', 'omeka_s_tools2/api.py')},
+            'omeka_s_tools2.core': {'omeka_s_tools2.core.foo': ('nbs/core.html#foo', 'omeka_s_tools2/core.py')}}}
