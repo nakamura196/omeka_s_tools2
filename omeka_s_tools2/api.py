@@ -11,7 +11,6 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from pathlib import Path
 
-# %% ../api.ipynb 4
 class OmekaAPIClient():
     
     def __init__(self, api_url, key_identity=None, key_credential=None, use_cache=True):
