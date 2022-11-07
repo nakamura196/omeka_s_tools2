@@ -5,7 +5,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: fastai/workflows/nbdev-ci@master]
+      - uses: fastai/workflows/nbdev-ci@master
         env:
           APIURL: ${{secrets.API_URL}}
           KEY_IDENTITY: ${{secrets.KEY_IDENTITY}}
