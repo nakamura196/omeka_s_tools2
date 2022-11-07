@@ -69,5 +69,4 @@ d = { 'settings': { 'branch': 'main',
                                     'omeka_s_tools2.api.OmekaAPIClient.update_resource': ( 'api.html#omekaapiclient.update_resource',
                                                                                            'omeka_s_tools2/api.py'),
                                     'omeka_s_tools2.api.OmekaAPIClient.upload_template': ( 'api.html#omekaapiclient.upload_template',
-                                                                                           'omeka_s_tools2/api.py')},
-            'omeka_s_tools2.core': {'omeka_s_tools2.core.foo': ('nbs/core.html#foo', 'omeka_s_tools2/core.py')}}}
+                                                                                           'omeka_s_tools2/api.py')}}}
