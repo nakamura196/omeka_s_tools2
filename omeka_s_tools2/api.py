@@ -275,7 +275,7 @@ class OmekaAPIClient():
         The formatted value can be used in a payload to create a new item.
         
         Parameters:
-        * `value` - a dict containing a `value` and (optionally) a `type`
+        * `value` - a dict containing a `value` and (optionally) a `type` and `lang`  
         * `property_id` - the numeric identifier of the property
         
         Note that is no `type` is supplied, 'literal' will be used by default.
@@ -304,6 +304,8 @@ class OmekaAPIClient():
             property_value['@id'] = value['value']
         else:
             property_value['@value'] = value['value']
+            if 'lang' in value:
+                property_value['@language'] = value['lang']
         return property_value
 
     def add_item(self, payload, media_files=None, template_id=None, class_id=None, item_set_id=None):
