@@ -53,8 +53,8 @@ class OmekaAPIClient():
         '''
         Generate a formatted id for the resource with the specified Omeka id number and resource type.
         
-        Parameters:
-        * `resource_id` - numeric identifier used by Omeka for this resource
+        Parameters:  
+        * `resource_id` - numeric identifier used by Omeka for this resource  
         * `resource_type` - one of Omeka's resource types, eg: 'items', 'properties'
         
         Returns:
@@ -68,16 +68,16 @@ class OmekaAPIClient():
 
     def get_resources(self, resource_type, **kwargs):
         '''
-        Get a list of resources matching the supplied parameters.
+        Get a list of resources matching the supplied parameters.  
         This will return the first page of matching results. To retrieve additional pages, 
         you can supply the `page` parameter to move through the full result set.
         
-        Parameters:
-        * `resource_type` - one of Omeka's resource types, eg: 'items', 'properties'
+        Parameters:  
+        * `resource_type` - one of Omeka's resource types, eg: 'items', 'properties'  
         * there are many additional parameters you can supply as kwargs, see the Omeka documention
         
-        Returns a dict with the following values:
-        * `total_results` - number of matching resources
+        Returns a dict with the following values:  
+        * `total_results` - number of matching resources  
         * `results` - a list of dicts, each containing a JSON-LD formatted representation of a resource
         '''
         response = self.s.get(f'{self.api_url}/{resource_type}/', params=kwargs)
@@ -88,11 +88,11 @@ class OmekaAPIClient():
         '''
         Get the first resource matching the supplied parameters.
         
-        Parameters:
-        * `resource_type` - one of Omeka's resource types, eg: 'items', 'properties'
+        Parameters:  
+        * `resource_type` - one of Omeka's resource types, eg: 'items', 'properties'  
         * there are many additional parameters you can supply as kwargs, see the Omeka documention
         
-        Returns
+        Returns  
         * a dict containing a JSON-LD formatted representation of the resource
         '''
         
@@ -108,11 +108,11 @@ class OmekaAPIClient():
         '''
         Get a resource from its Omeka id.
         
-        Parameters:
-        * `resource_id` - numeric identifier used by Omeka for this resource
+        Parameters:  
+        * `resource_id` - numeric identifier used by Omeka for this resource  
         * `resource_type` - one of Omeka's resource types, eg: 'items', 'properties'
         
-        Returns
+        Returns  
         * a dict containing a JSON-LD formatted representation of the resource
         '''
         response = self.s.get(f'{self.api_url}/{resource_type}/{resource_id}')
@@ -123,10 +123,10 @@ class OmekaAPIClient():
         '''
         Get a resource template from its Omeka label.
         
-        Parameters:
+        Parameters:  
         * `label` - the name of the resource template in Omeka (eg. 'NewspaperArticle')
         
-        Returns:
+        Returns:  
         * dict containing representation of the template
         '''
         return self.get_resource('resource_templates', label=label)
@@ -135,10 +135,10 @@ class OmekaAPIClient():
         '''
         Get the resource (property or class) associated with the suppied term.
         
-        Parameters:
+        Parameters:  
         * `term` - property label qualified with vocabulary prefix (eg: 'schema:name')
         
-        Returns:
+        Returns:  
         * dict containing representation of the resource
         '''
         return self.get_resource(resource_type, term=term)
@@ -147,11 +147,11 @@ class OmekaAPIClient():
         '''
         Get the resource (property or class) associated with the suppied vocabulary and label.
         
-        Parameters:
-        * `local_name` - label of the property or class
+        Parameters:  
+        * `local_name` - label of the property or class  
         * `vocabulary_namespace_uri` - URI defining the vocab
         
-        Returns:
+        Returns:  
         * dict containing representation of the resource
         '''
         return self.get_resource(resource_type, local_name=local_name, vocabulary_namespace_uri=vocabulary_namespace_uri)
@@ -160,10 +160,10 @@ class OmekaAPIClient():
         '''
         Get the numeric identifier associated with the supplied property term.
         
-        Parameters:
+        Parameters:  
         * `term` - property label qualified with vocabulary prefix (eg: 'schema:name')
         
-        Returns:
+        Returns:  
         * numeric identifier
         '''
         resource = self.get_resource_by_term(term=term)
@@ -179,23 +179,23 @@ class OmekaAPIClient():
     
     def filter_items_by_property(self, filter_property='schema:name', filter_value='', filter_type='eq', page=1, **extra_filters):
         '''
-        Filter the list of items by searching for a value in a particular property.
+        Filter the list of items by searching for a value in a particular property.  
         Additional filters can also limit to items associated with particular templates, classes, or item sets.
         
-        Parameters:
-        * `filter_property` - property term (eg: 'schema:name')
-        * `filter_value` - the value you want to find
-        * `filter_type` - how `filter_value` should be compared to the stored values (eg: 'eq')
+        Parameters:  
+        * `filter_property` - property term (eg: 'schema:name')  
+        * `filter_value` - the value you want to find  
+        * `filter_type` - how `filter_value` should be compared to the stored values (eg: 'eq')  
         * `page` - number of results page
         
-        Additional parameters:
-        * `resource_template_id` - numeric identifier
-        * `resource_class_id` - numeric identifier
-        * `item_set_id` - numeric identifier
+        Additional parameters:  
+        * `resource_template_id` - numeric identifier  
+        * `resource_class_id` - numeric identifier  
+        * `item_set_id` - numeric identifier  
         * `is_public` - boolean, True or False
         
-        Returns a dict with the following values:
-        * `total_results` - number of matching resources
+        Returns a dict with the following values:  
+        * `total_results` - number of matching resources  
         * `results` - a list of dicts, each containing a JSON-LD formatted representation of a resource
         
         '''
@@ -215,24 +215,24 @@ class OmekaAPIClient():
     
     def search_items(self, query, search_type='fulltext_search', page=1, **extra_filters):
         '''
-        Search for matching items.
-        Two search types are available:
-        * 'search` - looks for an exact match of the query in a property value
+        Search for matching items.  
+        Two search types are available:  
+        * 'search` - looks for an exact match of the query in a property value  
         * 'fulltext_search` - looks for the occurance of the query anywhere
         
-        Parameters:
-        * `query` - the text you want to search for
-        * `search_type` - one of 'fulltext_search' or 'search'
+        Parameters:  
+        * `query` - the text you want to search for  
+        * `search_type` - one of 'fulltext_search' or 'search'  
         * `page` - number of results page
         
-        Additional parameters:
-        * `resource_template_id` - numeric identifier
-        * `resource_class_id` - numeric identifier
-        * `item_set_id` - numeric identifier
+        Additional parameters:  
+        * `resource_template_id` - numeric identifier  
+        * `resource_class_id` - numeric identifier  
+        * `item_set_id` - numeric identifier  
         * `is_public` - boolean, True or False
         
-        Returns a dict with the following values:
-        * `total_results` - number of matching resources
+        Returns a dict with the following values:  
+        * `total_results` - number of matching resources  
         * `results` - a list of dicts, each containing a JSON-LD formatted representation of a resource
         '''
         params = {'page': page}
@@ -245,14 +245,14 @@ class OmekaAPIClient():
         '''
         List properties used by the specified template.
         
-        The resource template objects returned by the API don't include property terms.
+        The resource template objects returned by the API don't include property terms.  
         This function gets the additional details, and organises the properties in a dictionary, 
         organised by term. This makes it easy to check if a particular term is used by a template.
         
-        Parameters:
+        Parameters:  
         * `template_id` - numeric identifier for a template
         
-        Returns:
+        Returns:  
         * a dict organised by property terms, with values for `property_id` and `type`
         '''
         properties = {}
@@ -271,10 +271,10 @@ class OmekaAPIClient():
         
     def prepare_property_value(self, value, property_id):
         '''
-        Formats a property value according to its datatype as expected by Omeka. 
+        Formats a property value according to its datatype as expected by Omeka.   
         The formatted value can be used in a payload to create a new item.
         
-        Parameters:
+        Parameters:  
         * `value` - a dict containing a `value` and (optionally) a `type` and `lang`  
         * `property_id` - the numeric identifier of the property
         
@@ -312,14 +312,14 @@ class OmekaAPIClient():
         '''
         Create a new item from the supplied payload, optionally uploading attached media files.
         
-        Parameters:
-        * `payload` - a dict generated by `prepare_item_payload()` or `prepare_item_payload_using_template()`
-        * `media_files` - a list of paths pointing to media files, or a list of dicts with `path` and `title` values
-        * `template_id` - internal Omeka identifier of a resource template you want to attach to this item
-        * `class_id` - internal Omeka identifier of a resource class you want to attach to this item
+        Parameters:  
+        * `payload` - a dict generated by `prepare_item_payload()` or `prepare_item_payload_using_template()`  
+        * `media_files` - a list of paths pointing to media files, or a list of dicts with `path` and `title` values  
+        * `template_id` - internal Omeka identifier of a resource template you want to attach to this item  
+        * `class_id` - internal Omeka identifier of a resource class you want to attach to this item  
         * `item_set_id` - internal Omeka identifier for an item set you want to add this item to
         
-        Returns:
+        Returns:  
         * a dict providing the JSON-LD representation of the new item from Omeka
         '''
         if template_id:
@@ -345,10 +345,10 @@ class OmekaAPIClient():
         '''
         Prepare an item payload, ready for upload.
         
-        Parameters:
+        Parameters:  
         * `terms`: a dict of terms, values, and (optionally) data types
         
-        Returns:
+        Returns:  
         * the payload dict
         '''
         payload = {}
@@ -367,17 +367,18 @@ class OmekaAPIClient():
     
     def prepare_item_payload_using_template(self, terms, template_id):
         '''
-        Prepare an item payload, checking the supplied terms and values against the specified template.
-        Note:
-        * terms that are not in the template will generate a warning and be dropped from the payload
-        * data types that don't match the template definitions will generate a warning and the term will be dropped from the payload
+        Prepare an item payload, checking the supplied terms and values against the specified template.  
+        
+        Note:  
+        * terms that are not in the template will generate a warning and be dropped from the payload  
+        * data types that don't match the template definitions will generate a warning and the term will be dropped from the payload  
         * if no data type is supplied, a type that conforms with the template definition will be used
         
-        Parameters:
-        * `terms`: a dict of terms, values, and (optionally) data types
+        Parameters:  
+        * `terms`: a dict of terms, values, and (optionally) data types  
         * `template_id`: Omeka's internal numeric identifier for the template
         
-        Returns:
+        Returns:  
         * the payload dict
         '''
         template_properties = self.get_template_properties(template_id)
@@ -415,7 +416,7 @@ class OmekaAPIClient():
         '''
         Add media files to the item payload.
         
-        Parameters:  
+        Parameters:   
         * `payload` - the payload dict to be modified  
         * `media_files` - media files to be uploaded
         
@@ -504,7 +505,7 @@ class OmekaAPIClient():
         * `media_path` - a path to an image/media file (string or pathlib Path)  
         * `payload` (optional) - metadata to attach to media object, either 
            a dict generated by `prepare_item_payload()` or `prepare_item_payload_using_template()`,
-           or a string which is used as the value for `dcterms:title`.
+           or a string which is used as the value for `dcterms:title`.  
         * `template_id` - internal Omeka identifier of a resource template you want to attach to this item  
         * `class_id` - internal Omeka identifier of a resource class you want to attach to this item
         
@@ -546,10 +547,10 @@ class OmekaAPIClient():
         
         Parameters:  
         * `item_id` - the Omeka id of the item this media file should be added to  
-        * `iiif_url` - a url to a iiif image (string)
-        * `payload` (optional) - metadata to attach to media object, either 
+        * `iiif_url` - a url to a iiif image (string)  
+        * `payload` (optional) - metadata to attach to media object, either  
            a dict generated by `prepare_item_payload()` or `prepare_item_payload_using_template()`,
-           or a string which is used as the value for `dcterms:title`.
+           or a string which is used as the value for `dcterms:title`.  
         * `template_id` - internal Omeka identifier of a resource template you want to attach to this item  
         * `class_id` - internal Omeka identifier of a resource class you want to attach to this item
         
@@ -591,10 +592,10 @@ class OmekaAPIClient():
         and insert it into the data type information.  
         Requires the `customvocab` module to be installed.
         
-        Parameters:
+        Parameters:  
         * `data_types` - a list of data types from an exported template property
         
-        Returns:
+        Returns:  
         * list of datatypes with local identifiers
         '''
         dt_names = []
@@ -614,10 +615,10 @@ class OmekaAPIClient():
         '''
         Get the local id of the resource class associated with the supplied template.
         
-        Parameters:
+        Parameters:  
         * `template` - dict from exported template
         
-        Returns:
+        Returns:  
         * class identifier
         '''
         resource_class = self.get_resource_from_vocab(
@@ -634,11 +635,11 @@ class OmekaAPIClient():
         '''
         Get the local id of the property associated with the supplied template.
         
-        Parameters:
-        * `template` - dict from exported template
+        Parameters:  
+        * `template` - dict from exported template  
         * `term` - property term (eg 'o:title_property')
         
-        Returns:
+        Returns:  
         * property identifier
         '''
         prop = self.get_resource_from_vocab(
@@ -656,10 +657,10 @@ class OmekaAPIClient():
         Insert local property, class, and vocab identifiers into a resource template
         exported from Omeka so that it can be uploaded to the local instance.
         
-        Parameters:
+        Parameters:  
         * `template_file` - path to a template exported from Omeka (str or pathlib Path)
         
-        Returns:
+        Returns:  
         * template payload with local identifiers inserted
         '''
         # Load the template file from the filesystem
@@ -708,10 +709,10 @@ class OmekaAPIClient():
         '''
         Upload a template exported from an instance of Omeka to the current local instance.
         
-        Parameters:
+        Parameters:  
         * `template_payload` - dict payload generated by `prepare_template_payload`
         
-        Return:
+        Return:  
         * dict containing a JSON-LD representation of the uploaded template
         '''
         # Upload the template payload
@@ -754,14 +755,14 @@ class OmekaAPIClient():
         Add a map marker to an item.
         Requires the `mapping` module to be installed.
         
-        Parameters:
-        * `item_id` - identifier of item to add marker to
-        * `coords` - list with coordinates in longitude, latitude order eg [151.209900, -33.865143]
-        * `terms` - list with vocab terms containing longitude and latitude values eg ['schema:longitude', 'schema:latitude']
-        * `label` - label for marker (defaults to item title)
+        Parameters:  
+        * `item_id` - identifier of item to add marker to  
+        * `coords` - list with coordinates in longitude, latitude order eg [151.209900, -33.865143]  
+        * `terms` - list with vocab terms containing longitude and latitude values eg ['schema:longitude', 'schema:latitude']  
+        * `label` - label for marker (defaults to item title)  
         * `media_id` - identifier of media resource to display with marker
         
-        Returns:
+        Returns:  
         * dict providing JSON-LD representation of marker
         '''
         item = self.get_resource_by_id(item_id)

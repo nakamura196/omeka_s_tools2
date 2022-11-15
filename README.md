@@ -14,8 +14,8 @@ Omeka S Tools 2
 ## How to use
 
 [See the
-documentation](https://nakamura196.github.io/omeka_s_tools/api.html) for
-full details of the Omeka API Client.
+documentation](https://nakamura196.github.io/omeka_s_tools2/api.html)
+for full details of the Omeka API Client.
 
 ``` python
 from omeka_s_tools2.api import *
