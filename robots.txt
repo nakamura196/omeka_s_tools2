@@ -1,0 +1,1 @@
+Sitemap: https://nakamura196.github.io/omeka_s_tools2/sitemap.xml

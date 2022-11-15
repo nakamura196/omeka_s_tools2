@@ -1,0 +1,1957 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Tools to interact with the Omeka S REST API">
+
+<title>omeka_s_tools2 - Omeka S API client</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="omeka_s_tools2 - Omeka S API client">
+<meta property="og:description" content="Tools to interact with the Omeka S REST API">
+<meta property="og:site-name" content="omeka_s_tools2">
+<meta name="twitter:title" content="omeka_s_tools2 - Omeka S API client">
+<meta name="twitter:description" content="Tools to interact with the Omeka S REST API">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">omeka_s_tools2</span>
+    </a>
+  </div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Omeka S API client</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Omeka S Tools 2</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./api.html" class="sidebar-item-text sidebar-link active">Omeka S API client</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./demo_lang.html" class="sidebar-item-text sidebar-link">Demo for <code>language</code> tag</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#omekaapiclient" id="toc-omekaapiclient" class="nav-link active" data-scroll-target="#omekaapiclient">OmekaAPIClient</a></li>
+  <li><a href="#getting-resources" id="toc-getting-resources" class="nav-link" data-scroll-target="#getting-resources">Getting resources</a>
+  <ul class="collapse">
+  <li><a href="#omekaapiclient.get_resources" id="toc-omekaapiclient.get_resources" class="nav-link" data-scroll-target="#omekaapiclient.get_resources">OmekaAPIClient.get_resources</a></li>
+  <li><a href="#omekaapiclient.get_resource_by_id" id="toc-omekaapiclient.get_resource_by_id" class="nav-link" data-scroll-target="#omekaapiclient.get_resource_by_id">OmekaAPIClient.get_resource_by_id</a></li>
+  <li><a href="#omekaapiclient.get_template_by_label" id="toc-omekaapiclient.get_template_by_label" class="nav-link" data-scroll-target="#omekaapiclient.get_template_by_label">OmekaAPIClient.get_template_by_label</a></li>
+  <li><a href="#omekaapiclient.get_resource_by_term" id="toc-omekaapiclient.get_resource_by_term" class="nav-link" data-scroll-target="#omekaapiclient.get_resource_by_term">OmekaAPIClient.get_resource_by_term</a></li>
+  <li><a href="#omekaapiclient.get_resource_from_vocab" id="toc-omekaapiclient.get_resource_from_vocab" class="nav-link" data-scroll-target="#omekaapiclient.get_resource_from_vocab">OmekaAPIClient.get_resource_from_vocab</a></li>
+  <li><a href="#omekaapiclient.get_property_id" id="toc-omekaapiclient.get_property_id" class="nav-link" data-scroll-target="#omekaapiclient.get_property_id">OmekaAPIClient.get_property_id</a></li>
+  <li><a href="#omekaapiclient.filter_items_by_property" id="toc-omekaapiclient.filter_items_by_property" class="nav-link" data-scroll-target="#omekaapiclient.filter_items_by_property">OmekaAPIClient.filter_items_by_property</a></li>
+  <li><a href="#omekaapiclient.search_items" id="toc-omekaapiclient.search_items" class="nav-link" data-scroll-target="#omekaapiclient.search_items">OmekaAPIClient.search_items</a></li>
+  </ul></li>
+  <li><a href="#adding-items" id="toc-adding-items" class="nav-link" data-scroll-target="#adding-items">Adding items</a>
+  <ul class="collapse">
+  <li><a href="#prepare-an-item-payload" id="toc-prepare-an-item-payload" class="nav-link" data-scroll-target="#prepare-an-item-payload">Prepare an item payload</a></li>
+  <li><a href="#omekaapiclient.prepare_item_payload" id="toc-omekaapiclient.prepare_item_payload" class="nav-link" data-scroll-target="#omekaapiclient.prepare_item_payload">OmekaAPIClient.prepare_item_payload</a></li>
+  <li><a href="#omekaapiclient.prepare_item_payload_using_template" id="toc-omekaapiclient.prepare_item_payload_using_template" class="nav-link" data-scroll-target="#omekaapiclient.prepare_item_payload_using_template">OmekaAPIClient.prepare_item_payload_using_template</a></li>
+  <li><a href="#omekaapiclient.add_iiif_to_payload" id="toc-omekaapiclient.add_iiif_to_payload" class="nav-link" data-scroll-target="#omekaapiclient.add_iiif_to_payload">OmekaAPIClient.add_iiif_to_payload</a></li>
+  <li><a href="#omekaapiclient.add_media_to_payload" id="toc-omekaapiclient.add_media_to_payload" class="nav-link" data-scroll-target="#omekaapiclient.add_media_to_payload">OmekaAPIClient.add_media_to_payload</a></li>
+  <li><a href="#upload-the-payload-to-omeka-and-create-a-new-item" id="toc-upload-the-payload-to-omeka-and-create-a-new-item" class="nav-link" data-scroll-target="#upload-the-payload-to-omeka-and-create-a-new-item">Upload the payload to Omeka and create a new item</a></li>
+  <li><a href="#omekaapiclient.add_item" id="toc-omekaapiclient.add_item" class="nav-link" data-scroll-target="#omekaapiclient.add_item">OmekaAPIClient.add_item</a></li>
+  <li><a href="#add-a-simple-item" id="toc-add-a-simple-item" class="nav-link" data-scroll-target="#add-a-simple-item">Add a simple item</a></li>
+  </ul></li>
+  <li><a href="#updating-resources" id="toc-updating-resources" class="nav-link" data-scroll-target="#updating-resources">Updating resources</a>
+  <ul class="collapse">
+  <li><a href="#omekaapiclient.delete_resource" id="toc-omekaapiclient.delete_resource" class="nav-link" data-scroll-target="#omekaapiclient.delete_resource">OmekaAPIClient.delete_resource</a></li>
+  <li><a href="#omekaapiclient.update_resource" id="toc-omekaapiclient.update_resource" class="nav-link" data-scroll-target="#omekaapiclient.update_resource">OmekaAPIClient.update_resource</a></li>
+  <li><a href="#omekaapiclient.add_media_to_item" id="toc-omekaapiclient.add_media_to_item" class="nav-link" data-scroll-target="#omekaapiclient.add_media_to_item">OmekaAPIClient.add_media_to_item</a></li>
+  <li><a href="#omekaapiclient.add_iiif_to_item" id="toc-omekaapiclient.add_iiif_to_item" class="nav-link" data-scroll-target="#omekaapiclient.add_iiif_to_item">OmekaAPIClient.add_iiif_to_item</a></li>
+  <li><a href="#omekaapiclient.add_marker_to_item" id="toc-omekaapiclient.add_marker_to_item" class="nav-link" data-scroll-target="#omekaapiclient.add_marker_to_item">OmekaAPIClient.add_marker_to_item</a></li>
+  </ul></li>
+  <li><a href="#managing-templates" id="toc-managing-templates" class="nav-link" data-scroll-target="#managing-templates">Managing templates</a>
+  <ul class="collapse">
+  <li><a href="#omekaapiclient.prepare_template_payload" id="toc-omekaapiclient.prepare_template_payload" class="nav-link" data-scroll-target="#omekaapiclient.prepare_template_payload">OmekaAPIClient.prepare_template_payload</a></li>
+  <li><a href="#omekaapiclient.upload_template" id="toc-omekaapiclient.upload_template" class="nav-link" data-scroll-target="#omekaapiclient.upload_template">OmekaAPIClient.upload_template</a></li>
+  <li><a href="#omekaapiclient.localise_custom_vocabs" id="toc-omekaapiclient.localise_custom_vocabs" class="nav-link" data-scroll-target="#omekaapiclient.localise_custom_vocabs">OmekaAPIClient.localise_custom_vocabs</a></li>
+  <li><a href="#omekaapiclient.get_template_class_id" id="toc-omekaapiclient.get_template_class_id" class="nav-link" data-scroll-target="#omekaapiclient.get_template_class_id">OmekaAPIClient.get_template_class_id</a></li>
+  <li><a href="#omekaapiclient.get_template_property_id" id="toc-omekaapiclient.get_template_property_id" class="nav-link" data-scroll-target="#omekaapiclient.get_template_property_id">OmekaAPIClient.get_template_property_id</a></li>
+  </ul></li>
+  <li><a href="#adding-item-sets" id="toc-adding-item-sets" class="nav-link" data-scroll-target="#adding-item-sets">Adding item sets</a>
+  <ul class="collapse">
+  <li><a href="#prepare-an-item-set-payload" id="toc-prepare-an-item-set-payload" class="nav-link" data-scroll-target="#prepare-an-item-set-payload">Prepare an item set payload</a></li>
+  <li><a href="#omekaapiclient.prepare_item_payload-1" id="toc-omekaapiclient.prepare_item_payload-1" class="nav-link" data-scroll-target="#omekaapiclient.prepare_item_payload-1">OmekaAPIClient.prepare_item_payload</a></li>
+  <li><a href="#upload-the-payload-to-omeka-and-create-a-new-item-set" id="toc-upload-the-payload-to-omeka-and-create-a-new-item-set" class="nav-link" data-scroll-target="#upload-the-payload-to-omeka-and-create-a-new-item-set">Upload the payload to Omeka and create a new item set</a></li>
+  <li><a href="#omekaapiclient.add_item_set" id="toc-omekaapiclient.add_item_set" class="nav-link" data-scroll-target="#omekaapiclient.add_item_set">OmekaAPIClient.add_item_set</a></li>
+  <li><a href="#add-a-simple-item-set" id="toc-add-a-simple-item-set" class="nav-link" data-scroll-target="#add-a-simple-item-set">Add a simple item set</a></li>
+  </ul></li>
+  <li><a href="#utilities" id="toc-utilities" class="nav-link" data-scroll-target="#utilities">Utilities</a>
+  <ul class="collapse">
+  <li><a href="#omekaapiclient.format_resource_id" id="toc-omekaapiclient.format_resource_id" class="nav-link" data-scroll-target="#omekaapiclient.format_resource_id">OmekaAPIClient.format_resource_id</a></li>
+  <li><a href="#omekaapiclient.prepare_property_value" id="toc-omekaapiclient.prepare_property_value" class="nav-link" data-scroll-target="#omekaapiclient.prepare_property_value">OmekaAPIClient.prepare_property_value</a></li>
+  <li><a href="#omekaapiclient.get_template_properties" id="toc-omekaapiclient.get_template_properties" class="nav-link" data-scroll-target="#omekaapiclient.get_template_properties">OmekaAPIClient.get_template_properties</a></li>
+  </ul></li>
+  <li><a href="#example-adding-a-newspaper-article-from-trove" id="toc-example-adding-a-newspaper-article-from-trove" class="nav-link" data-scroll-target="#example-adding-a-newspaper-article-from-trove">Example: adding a newspaper article from Trove</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/nakamura196/omeka_s_tools2/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Omeka S API client</h1>
+</div>
+
+<div>
+  <div class="description">
+    Tools to interact with the Omeka S REST API
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L14" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="omekaapiclient" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient">OmekaAPIClient</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient (api_url, key_identity=None, key_credential=None,
+                 use_cache=True)</code></pre>
+</blockquote>
+<p>Initialize self. See help(type(self)) for accurate signature.</p>
+<p>First import the <a href="https://nakamura196.github.io/omeka_s_tools2/api.html#omekaapiclient"><code>OmekaAPIClient</code></a> class.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> omeka_s_tools.api <span class="im">import</span> OmekaAPIClient</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To initialise the <a href="https://nakamura196.github.io/omeka_s_tools2/api.html#omekaapiclient"><code>OmekaAPIClient</code></a> you need to provide the base url of your Omeka instance’s API.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># omeka = OmekaAPIClient('http://timsherratt.org/collections/api')</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>omeka <span class="op">=</span> OmekaAPIClient(os.getenv(<span class="st">'API_URL'</span>), use_cache<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will let you access details of all public resources provided by your Omeka instance. To access private resources, or create new resources, you’ll have to authenticate your API requests by provide a <code>key_identity</code> and <code>key_credential</code>. See <a href="#Adding-items">Adding items</a> for an example.</p>
+</section>
+<section id="getting-resources" class="level2">
+<h2 class="anchored" data-anchor-id="getting-resources">Getting resources</h2>
+<p>You can find a <a href="https://omeka.org/s/docs/developer/api/#resources">full list of Omeka’s resources</a> in the API documentation. You’re most likely to be interested in ‘items’, but accessing ‘properties’ and ‘resource_templates’ can be useful when you’re creating new resources.</p>
+<p>You should be able to use <code>get_resources</code> with any of the resource types, though some of the parameters will be different.</p>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L69" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="omekaapiclient.get_resources" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.get_resources">OmekaAPIClient.get_resources</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.get_resources (resource_type, **kwargs)</code></pre>
+</blockquote>
+<p>Get a list of resources matching the supplied parameters.<br>
+This will return the first page of matching results. To retrieve additional pages, you can supply the <code>page</code> parameter to move through the full result set.</p>
+<p>Parameters:<br>
+* <code>resource_type</code> - one of Omeka’s resource types, eg: ‘items’, ‘properties’<br>
+* there are many additional parameters you can supply as kwargs, see the Omeka documention</p>
+<p>Returns a dict with the following values:<br>
+* <code>total_results</code> - number of matching resources<br>
+* <code>results</code> - a list of dicts, each containing a JSON-LD formatted representation of a resource</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> omeka.get_resources(<span class="st">'items'</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'total_results'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>7109</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(data[<span class="st">'total_results'</span>], <span class="bu">int</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get a list of available resource templates</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> omeka.get_resources(<span class="st">'resource_templates'</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>first_template <span class="op">=</span> data[<span class="st">'results'</span>][<span class="dv">0</span>]</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> first_template[<span class="st">'@type'</span>] <span class="op">==</span> <span class="st">'o:ResourceTemplate'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L107" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.get_resource_by_id" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.get_resource_by_id">OmekaAPIClient.get_resource_by_id</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.get_resource_by_id (resource_id, resource_type='items')</code></pre>
+</blockquote>
+<p>Get a resource from its Omeka id.</p>
+<p>Parameters:<br>
+* <code>resource_id</code> - numeric identifier used by Omeka for this resource<br>
+* <code>resource_type</code> - one of Omeka’s resource types, eg: ‘items’, ‘properties’</p>
+<p>Returns<br>
+* a dict containing a JSON-LD formatted representation of the resource</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get a random item from a list of items</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> omeka.get_resources(<span class="st">'items'</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>random_item <span class="op">=</span> random.choice(data[<span class="st">'results'</span>])</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>item_id <span class="op">=</span> random_item[<span class="st">'o:id'</span>]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the same item using its id</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>item_from_id <span class="op">=</span> omeka.get_resource_by_id(item_id, <span class="st">'items'</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that they're the same</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> random_item <span class="op">==</span> item_from_id</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>It can be difficult to remember all the available parameters and the differences between resource types, so I’ve created a number of more specialised methods that are really just wrappers around <code>get_resources</code>.</p>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L122" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.get_template_by_label" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.get_template_by_label">OmekaAPIClient.get_template_by_label</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.get_template_by_label (label)</code></pre>
+</blockquote>
+<p>Get a resource template from its Omeka label.</p>
+<p>Parameters:<br>
+* <code>label</code> - the name of the resource template in Omeka (eg. ‘NewspaperArticle’)</p>
+<p>Returns:<br>
+* dict containing representation of the template</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>newspaper_template <span class="op">=</span> omeka.get_template_by_label(<span class="st">'Newspaper'</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> newspaper_template[<span class="st">'@type'</span>] <span class="op">==</span> <span class="st">'o:ResourceTemplate'</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> newspaper_template[<span class="st">'o:label'</span>] <span class="op">==</span> <span class="st">'Newspaper'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get a random template from list</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>template_from_list <span class="op">=</span> random.choice(omeka.get_resources(<span class="st">'resource_templates'</span>)[<span class="st">'results'</span>])</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>label <span class="op">=</span> template_from_list[<span class="st">'o:label'</span>]</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the template using label</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>template_from_label <span class="op">=</span> omeka.get_template_by_label(label)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Check they're both the same</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> template_from_list <span class="op">==</span> template_from_label</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L134" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.get_resource_by_term" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.get_resource_by_term">OmekaAPIClient.get_resource_by_term</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.get_resource_by_term (term, resource_type='properties')</code></pre>
+</blockquote>
+<p>Get the resource (property or class) associated with the suppied term.</p>
+<p>Parameters:<br>
+* <code>term</code> - property label qualified with vocabulary prefix (eg: ‘schema:name’)</p>
+<p>Returns:<br>
+* dict containing representation of the resource</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>prop <span class="op">=</span> omeka.get_resource_by_term(<span class="st">'schema:name'</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>prop</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'@context': 'https://omekas.aws.ldas.jp/sandbox/api-context',
+ '@id': 'https://omekas.aws.ldas.jp/sandbox/api/properties/2922',
+ '@type': 'o:Property',
+ 'o:id': 2922,
+ 'o:local_name': 'name',
+ 'o:label': 'name',
+ 'o:comment': 'The name of the item.',
+ 'o:term': 'schema:name',
+ 'o:vocabulary': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/vocabularies/7',
+  'o:id': 7}}</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> prop[<span class="st">'@type'</span>] <span class="op">==</span> <span class="st">'o:Property'</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> prop[<span class="st">'o:term'</span>] <span class="op">==</span> <span class="st">'schema:name'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L146" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.get_resource_from_vocab" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.get_resource_from_vocab">OmekaAPIClient.get_resource_from_vocab</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.get_resource_from_vocab (local_name,
+                                         vocabulary_namespace_uri='http://
+                                         schema.org/',
+                                         resource_type='properties')</code></pre>
+</blockquote>
+<p>Get the resource (property or class) associated with the suppied vocabulary and label.</p>
+<p>Parameters:<br>
+* <code>local_name</code> - label of the property or class<br>
+* <code>vocabulary_namespace_uri</code> - URI defining the vocab</p>
+<p>Returns:<br>
+* dict containing representation of the resource</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>prop <span class="op">=</span> omeka.get_resource_from_vocab(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'name'</span>, </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    vocabulary_namespace_uri<span class="op">=</span><span class="st">'http://schema.org/'</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    resource_type<span class="op">=</span><span class="st">'properties'</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>prop</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'@context': 'https://omekas.aws.ldas.jp/sandbox/api-context',
+ '@id': 'https://omekas.aws.ldas.jp/sandbox/api/properties/2922',
+ '@type': 'o:Property',
+ 'o:id': 2922,
+ 'o:local_name': 'name',
+ 'o:label': 'name',
+ 'o:comment': 'The name of the item.',
+ 'o:term': 'schema:name',
+ 'o:vocabulary': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/vocabularies/7',
+  'o:id': 7}}</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>vocab <span class="op">=</span> requests.get(prop[<span class="st">'o:vocabulary'</span>][<span class="st">'@id'</span>])</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>namespace_uri <span class="op">=</span> vocab.json()[<span class="st">'o:namespace_uri'</span>]</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> namespace_uri <span class="op">==</span> <span class="st">'http://schema.org/'</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> prop[<span class="st">'o:local_name'</span>] <span class="op">==</span> <span class="st">'name'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L159" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.get_property_id" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.get_property_id">OmekaAPIClient.get_property_id</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.get_property_id (term)</code></pre>
+</blockquote>
+<p>Get the numeric identifier associated with the supplied property term.</p>
+<p>Parameters:<br>
+* <code>term</code> - property label qualified with vocabulary prefix (eg: ‘schema:name’)</p>
+<p>Returns:<br>
+* numeric identifier</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>prop_id <span class="op">=</span> omeka.get_property_id(<span class="st">'schema:name'</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>prop_id</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>2922</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(prop_id, <span class="bu">int</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>prop <span class="op">=</span> omeka.get_resource_by_id(prop_id, <span class="st">'properties'</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> prop[<span class="st">'o:term'</span>] <span class="op">==</span> <span class="st">'schema:name'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L180" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.filter_items_by_property" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.filter_items_by_property">OmekaAPIClient.filter_items_by_property</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.filter_items_by_property (filter_property='schema:name',
+                                          filter_value='',
+                                          filter_type='eq', page=1,
+                                          **extra_filters)</code></pre>
+</blockquote>
+<p>Filter the list of items by searching for a value in a particular property.<br>
+Additional filters can also limit to items associated with particular templates, classes, or item sets.</p>
+<p>Parameters:<br>
+* <code>filter_property</code> - property term (eg: ‘schema:name’)<br>
+* <code>filter_value</code> - the value you want to find<br>
+* <code>filter_type</code> - how <code>filter_value</code> should be compared to the stored values (eg: ‘eq’)<br>
+* <code>page</code> - number of results page</p>
+<p>Additional parameters:<br>
+* <code>resource_template_id</code> - numeric identifier<br>
+* <code>resource_class_id</code> - numeric identifier<br>
+* <code>item_set_id</code> - numeric identifier<br>
+* <code>is_public</code> - boolean, True or False</p>
+<p>Returns a dict with the following values:<br>
+* <code>total_results</code> - number of matching resources<br>
+* <code>results</code> - a list of dicts, each containing a JSON-LD formatted representation of a resource</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>items <span class="op">=</span> omeka.filter_items_by_property(filter_property<span class="op">=</span><span class="st">'schema:name'</span>, filter_value<span class="op">=</span><span class="st">'My first resource!'</span>, filter_type<span class="op">=</span><span class="st">'in'</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(items[<span class="st">'results'</span>]) <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">'my first resource!'</span> <span class="kw">in</span> items[<span class="st">'results'</span>][<span class="dv">0</span>][<span class="st">'schema:name'</span>][<span class="dv">0</span>][<span class="st">'@value'</span>].lower()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>items[<span class="st">'results'</span>][<span class="dv">0</span>][<span class="st">'schema:name'</span>][<span class="dv">0</span>][<span class="st">'@value'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>'My first resource!'</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L216" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.search_items" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.search_items">OmekaAPIClient.search_items</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.search_items (query, search_type='fulltext_search',
+                              page=1, **extra_filters)</code></pre>
+</blockquote>
+<p>Search for matching items.<br>
+Two search types are available:<br>
+* ’search<code>- looks for an exact match of the query in a property value   * 'fulltext_search</code> - looks for the occurance of the query anywhere</p>
+<p>Parameters:<br>
+* <code>query</code> - the text you want to search for<br>
+* <code>search_type</code> - one of ‘fulltext_search’ or ‘search’<br>
+* <code>page</code> - number of results page</p>
+<p>Additional parameters:<br>
+* <code>resource_template_id</code> - numeric identifier<br>
+* <code>resource_class_id</code> - numeric identifier<br>
+* <code>item_set_id</code> - numeric identifier<br>
+* <code>is_public</code> - boolean, True or False</p>
+<p>Returns a dict with the following values:<br>
+* <code>total_results</code> - number of matching resources<br>
+* <code>results</code> - a list of dicts, each containing a JSON-LD formatted representation of a resource</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>items <span class="op">=</span> omeka.search_items(<span class="st">'My first resource!'</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>items[<span class="st">'total_results'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>14</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> items[<span class="st">'total_results'</span>] <span class="op">&gt;=</span> <span class="bu">len</span>(items[<span class="st">'results'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="adding-items" class="level2">
+<h2 class="anchored" data-anchor-id="adding-items">Adding items</h2>
+<p>To add resources to Omeka you need authenticate your API requests by supplying <code>key_identity</code> and <code>key_credential</code> tokens as parameters.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>omeka_auth <span class="op">=</span> OmekaAPIClient(</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># api_url='https://timsherratt.org/collections/api',</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    api_url<span class="op">=</span>os.getenv(<span class="st">'API_URL'</span>),</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    key_identity<span class="op">=</span>os.getenv(<span class="st">'KEY_IDENTITY'</span>), </span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    key_credential<span class="op">=</span>os.getenv(<span class="st">'KEY_CREDENTIAL'</span>),</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># use_cache=False</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There are two stages in creating a new item:</p>
+<ul>
+<li>prepare a payload containing the item data in the format expected by Omeka</li>
+<li>upload the payload to Omeka</li>
+</ul>
+<section id="prepare-an-item-payload" class="level3">
+<h3 class="anchored" data-anchor-id="prepare-an-item-payload">Prepare an item payload</h3>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L344" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.prepare_item_payload" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.prepare_item_payload">OmekaAPIClient.prepare_item_payload</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.prepare_item_payload (terms)</code></pre>
+</blockquote>
+<p>Prepare an item payload, ready for upload.</p>
+<p>Parameters:<br>
+* <code>terms</code>: a dict of terms, values, and (optionally) data types</p>
+<p>Returns:<br>
+* the payload dict</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>test_item <span class="op">=</span> {</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'schema:name'</span>: [</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">'value'</span>: <span class="st">'My first resource!'</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>payload <span class="op">=</span> omeka_auth.prepare_item_payload(test_item)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>payload</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'schema:name': [{'property_id': 2922,
+   'type': 'literal',
+   '@value': 'My first resource!'}]}</code></pre>
+</div>
+</div>
+<p>Each term in the payload should have values for <code>property_id</code> and <code>type</code>, and the property value should be included as either <code>@id</code> or <code>@value</code> depending on the data type.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>first_property <span class="op">=</span> <span class="bu">list</span>(payload.values())[<span class="dv">0</span>][<span class="dv">0</span>]</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">'property_id'</span> <span class="kw">in</span> first_property</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">'type'</span> <span class="kw">in</span> first_property</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">'@value'</span> <span class="kw">in</span> first_property <span class="kw">or</span> <span class="st">'@id'</span> <span class="kw">in</span> first_property</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>One of the powerful features of Omeka S is the ability to create resource templates that define a set of properties for a particular type of item. We can use templates to help create our payload, ensuring that the terms and data types we supply match those expected by the template. This is useful for identifying potential problems before we upload to Omeka, especially as Omeka will sometimes just fail silently.</p>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L368" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.prepare_item_payload_using_template" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.prepare_item_payload_using_template">OmekaAPIClient.prepare_item_payload_using_template</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.prepare_item_payload_using_template (terms, template_id)</code></pre>
+</blockquote>
+<p>Prepare an item payload, checking the supplied terms and values against the specified template.</p>
+<p>Note:<br>
+* terms that are not in the template will generate a warning and be dropped from the payload<br>
+* data types that don’t match the template definitions will generate a warning and the term will be dropped from the payload<br>
+* if no data type is supplied, a type that conforms with the template definition will be used</p>
+<p>Parameters:<br>
+* <code>terms</code>: a dict of terms, values, and (optionally) data types<br>
+* <code>template_id</code>: Omeka’s internal numeric identifier for the template</p>
+<p>Returns:<br>
+* the payload dict</p>
+<p>Once you’ve created a payload, you can add paths to any media files that you want to be attached to the item.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>test_newspaper_item <span class="op">=</span> {</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'schema:name'</span>: [</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">'value'</span>: <span class="st">'nakamura196!'</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>newspaper_template <span class="op">=</span> omeka.get_template_by_label(<span class="st">'Newspaper'</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>newspaper_template</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'@context': 'https://omekas.aws.ldas.jp/sandbox/api-context',
+ '@id': 'https://omekas.aws.ldas.jp/sandbox/api/resource_templates/2',
+ '@type': 'o:ResourceTemplate',
+ 'o:id': 2,
+ 'o:label': 'Newspaper',
+ 'o:owner': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/users/1',
+  'o:id': 1},
+ 'o:resource_class': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/resource_classes/26',
+  'o:id': 26},
+ 'o:title_property': None,
+ 'o:description_property': None,
+ 'o:resource_template_property': [{'o:property': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/properties/1',
+    'o:id': 1},
+   'o:alternate_label': None,
+   'o:alternate_comment': None,
+   'o:data_type': [],
+   'o:is_required': False,
+   'o:is_private': False},
+  {'o:property': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/properties/4',
+    'o:id': 4},
+   'o:alternate_label': None,
+   'o:alternate_comment': None,
+   'o:data_type': [],
+   'o:is_required': False,
+   'o:is_private': False},
+  {'o:property': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/properties/2922',
+    'o:id': 2922},
+   'o:alternate_label': None,
+   'o:alternate_comment': None,
+   'o:data_type': [],
+   'o:is_required': False,
+   'o:is_private': False}]}</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>test_newspaper_payload <span class="op">=</span> omeka_auth.prepare_item_payload_using_template(test_newspaper_item, newspaper_template[<span class="st">"o:id"</span>])</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>test_newspaper_payload</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'schema:name': [{'property_id': 2922,
+   'type': 'literal',
+   '@value': 'nakamura196!'}]}</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> test_newspaper_item[<span class="st">'schema:name'</span>][<span class="dv">0</span>][<span class="st">'value'</span>] <span class="op">==</span> test_newspaper_payload[<span class="st">'schema:name'</span>][<span class="dv">0</span>][<span class="st">'@value'</span>]</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> test_newspaper_payload[<span class="st">'schema:name'</span>][<span class="dv">0</span>][<span class="st">'type'</span>] <span class="op">==</span> <span class="st">'literal'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L447" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.add_iiif_to_payload" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.add_iiif_to_payload">OmekaAPIClient.add_iiif_to_payload</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.add_iiif_to_payload (payload, iiif_urls)</code></pre>
+</blockquote>
+<p>Add iiif urls to the item payload.</p>
+<p>Parameters:<br>
+* <code>payload</code> - the payload dict to be modified<br>
+* <code>iiif_urls</code> - iiif urls to be uploaded</p>
+<p>Returns:<br>
+* the modified payload dict</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>payload_with_iiif <span class="op">=</span> omeka_auth.add_iiif_to_payload({}, iiif_urls<span class="op">=</span>[<span class="st">'https://www.dl.ndl.go.jp/api/iiif/3437686/R0000001/info.json'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> json.loads(payload_with_iiif[<span class="st">'data'</span>][<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L415" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.add_media_to_payload" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.add_media_to_payload">OmekaAPIClient.add_media_to_payload</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.add_media_to_payload (payload, media_files)</code></pre>
+</blockquote>
+<p>Add media files to the item payload.</p>
+<p>Parameters:<br>
+* <code>payload</code> - the payload dict to be modified<br>
+* <code>media_files</code> - media files to be uploaded</p>
+<p>The value of <code>media_files</code> can be either:<br>
+* a list of paths to the image/media files (filename is used as title)<br>
+* a list of dicts, each containing <code>title</code>, and <code>path</code> values</p>
+<p>The path values can either be strings or pathlib Paths.</p>
+<p>Returns: * the modified payload dict</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>payload_with_media <span class="op">=</span> omeka_auth.add_media_to_payload({}, media_files<span class="op">=</span>[<span class="st">'media/nla.news-article226799674-24144902.jpg'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> json.loads(payload_with_media[<span class="st">'data'</span>][<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="upload-the-payload-to-omeka-and-create-a-new-item" class="level3">
+<h3 class="anchored" data-anchor-id="upload-the-payload-to-omeka-and-create-a-new-item">Upload the payload to Omeka and create a new item</h3>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L311" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.add_item" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.add_item">OmekaAPIClient.add_item</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.add_item (payload, media_files=None, template_id=None,
+                          class_id=None, item_set_id=None)</code></pre>
+</blockquote>
+<p>Create a new item from the supplied payload, optionally uploading attached media files.</p>
+<p>Parameters:<br>
+* <code>payload</code> - a dict generated by <code>prepare_item_payload()</code> or <code>prepare_item_payload_using_template()</code><br>
+* <code>media_files</code> - a list of paths pointing to media files, or a list of dicts with <code>path</code> and <code>title</code> values<br>
+* <code>template_id</code> - internal Omeka identifier of a resource template you want to attach to this item<br>
+* <code>class_id</code> - internal Omeka identifier of a resource class you want to attach to this item<br>
+* <code>item_set_id</code> - internal Omeka identifier for an item set you want to add this item to</p>
+<p>Returns:<br>
+* a dict providing the JSON-LD representation of the new item from Omeka</p>
+</section>
+<section id="add-a-simple-item" class="level3">
+<h3 class="anchored" data-anchor-id="add-a-simple-item">Add a simple item</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>new_item <span class="op">=</span> omeka_auth.add_item(payload)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>new_item</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'@context': 'https://omekas.aws.ldas.jp/sandbox/api-context',
+ '@id': 'https://omekas.aws.ldas.jp/sandbox/api/items/8027',
+ '@type': 'o:Item',
+ 'o:id': 8027,
+ 'o:is_public': True,
+ 'o:owner': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/users/1',
+  'o:id': 1},
+ 'o:resource_class': None,
+ 'o:resource_template': None,
+ 'o:thumbnail': None,
+ 'o:title': None,
+ 'thumbnail_display_urls': {'large': None, 'medium': None, 'square': None},
+ 'o:created': {'@value': '2022-11-15T04:08:56+00:00',
+  '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+ 'o:modified': {'@value': '2022-11-15T04:08:56+00:00',
+  '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+ 'o:media': [],
+ 'o:item_set': [],
+ 'o:site': [{'@id': 'https://omekas.aws.ldas.jp/sandbox/api/sites/1',
+   'o:id': 1},
+  {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/sites/2', 'o:id': 2}],
+ 'schema:name': [{'type': 'literal',
+   'property_id': 2922,
+   'property_label': 'name',
+   'is_public': True,
+   '@value': 'My first resource!'}]}</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> new_item[<span class="st">'@type'</span>] <span class="op">==</span> <span class="st">'o:Item'</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> test_item[<span class="st">'schema:name'</span>][<span class="dv">0</span>][<span class="st">'value'</span>] <span class="op">==</span> new_item[<span class="st">'schema:name'</span>][<span class="dv">0</span>][<span class="st">'@value'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can also add an item to an existing item set by supplying the <code>item_set_id</code> parameter.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get a random item set id</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>random_item_set <span class="op">=</span> random.choice(omeka_auth.get_resources(<span class="st">'item_sets'</span>)[<span class="st">'results'</span>])</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>item_set_id <span class="op">=</span> random_item_set[<span class="st">'o:id'</span>]</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new item using the item set id</span></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>new_item_in_item_set <span class="op">=</span> new_item <span class="op">=</span> omeka_auth.add_item(payload, item_set_id<span class="op">=</span>item_set_id)</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the ids match</span></span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> new_item_in_item_set[<span class="st">'o:item_set'</span>][<span class="dv">0</span>][<span class="st">'o:id'</span>] <span class="op">==</span> item_set_id</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="updating-resources" class="level2">
+<h2 class="anchored" data-anchor-id="updating-resources">Updating resources</h2>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L468" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="omekaapiclient.delete_resource" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.delete_resource">OmekaAPIClient.delete_resource</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.delete_resource (resource_id, resource_type)</code></pre>
+</blockquote>
+<p>Deletes a resource. No confirmation is requested, so use carefully.</p>
+<p>Parameters: * <code>resource_id</code> - local Omeka identifier of the resource you want to delete * <code>resource_type</code> - type of the resource (eg ‘items’)</p>
+<p>Returns: * dict with JSON-LD representation of the deleted resource</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get a random item from a list of items</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> omeka.get_resources(<span class="st">'items'</span>)</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>random_item <span class="op">=</span> random.choice(data[<span class="st">'results'</span>])</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>    deleted_resource <span class="op">=</span> omeka_auth.delete_resource(random_item[<span class="st">'o:id'</span>], <span class="st">'items'</span>)</span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The id of the deleted item should be None</span></span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> deleted_resource[<span class="st">'o:id'</span>] <span class="kw">is</span> <span class="va">None</span></span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The titles of the random and deleted items should be the same</span></span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> deleted_resource[<span class="st">'o:title'</span>] <span class="op">==</span> random_item[<span class="st">'o:title'</span>]</span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Trying to get the random item should now raise an HTTP 404 error</span></span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> pytest.raises(requests.exceptions.HTTPError):</span>
+<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a>        omeka_auth.get_resource_by_id(random_item[<span class="st">'o:id'</span>], <span class="st">'items'</span>)</span>
+<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(e)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;Response [500]&gt;
+500 Server Error: Internal Server Error for url: https://omekas.aws.ldas.jp/sandbox/api/items/917?key_identity=SizuLgHbsl5vHI95Eyko5jzK5W8fqns6&amp;key_credential=f7Zfaaukc5j1WGkHw99i3bJCHR7ZK3rO</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L484" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.update_resource" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.update_resource">OmekaAPIClient.update_resource</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.update_resource (payload, resource_type='items')</code></pre>
+</blockquote>
+<p>Update an existing resource.</p>
+<p>Parameters: * <code>payload</code> - the updated resource data * <code>resource_type</code> - the type of resource</p>
+<p>To avoid problems, it’s generally easiest to retrieve the resource first, make your desired changes to it, then submit the updated resource as your payload.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> omeka_auth.filter_items_by_property(filter_property<span class="op">=</span><span class="st">'schema:name'</span>, filter_type<span class="op">=</span><span class="st">'ex'</span>)</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'total_results': 5,
+ 'results': [{'@context': 'https://omekas.aws.ldas.jp/sandbox/api-context',
+   '@id': 'https://omekas.aws.ldas.jp/sandbox/api/items/8024',
+   '@type': 'o:Item',
+   'o:id': 8024,
+   'o:is_public': True,
+   'o:owner': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/users/1',
+    'o:id': 1},
+   'o:resource_class': None,
+   'o:resource_template': None,
+   'o:thumbnail': None,
+   'o:title': None,
+   'thumbnail_display_urls': {'large': None, 'medium': None, 'square': None},
+   'o:created': {'@value': '2022-11-15T04:06:06+00:00',
+    '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+   'o:modified': {'@value': '2022-11-15T04:06:06+00:00',
+    '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+   'o:media': [],
+   'o:item_set': [],
+   'o:site': [{'@id': 'https://omekas.aws.ldas.jp/sandbox/api/sites/1',
+     'o:id': 1},
+    {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/sites/2', 'o:id': 2}],
+   'schema:name': [{'type': 'literal',
+     'property_id': 2922,
+     'property_label': 'name',
+     'is_public': True,
+     '@value': 'My first resource!',
+     '@language': 'ja'}]},
+  {'@context': 'https://omekas.aws.ldas.jp/sandbox/api-context',
+   '@id': 'https://omekas.aws.ldas.jp/sandbox/api/items/8025',
+   '@type': 'o:Item',
+   'o:id': 8025,
+   'o:is_public': True,
+   'o:owner': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/users/1',
+    'o:id': 1},
+   'o:resource_class': None,
+   'o:resource_template': None,
+   'o:thumbnail': None,
+   'o:title': None,
+   'thumbnail_display_urls': {'large': None, 'medium': None, 'square': None},
+   'o:created': {'@value': '2022-11-15T04:07:21+00:00',
+    '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+   'o:modified': {'@value': '2022-11-15T04:07:21+00:00',
+    '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+   'o:media': [],
+   'o:item_set': [],
+   'o:site': [{'@id': 'https://omekas.aws.ldas.jp/sandbox/api/sites/1',
+     'o:id': 1},
+    {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/sites/2', 'o:id': 2}],
+   'schema:name': [{'type': 'literal',
+     'property_id': 2922,
+     'property_label': 'name',
+     'is_public': True,
+     '@value': 'My first resource!'}]},
+  {'@context': 'https://omekas.aws.ldas.jp/sandbox/api-context',
+   '@id': 'https://omekas.aws.ldas.jp/sandbox/api/items/8026',
+   '@type': 'o:Item',
+   'o:id': 8026,
+   'o:is_public': True,
+   'o:owner': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/users/1',
+    'o:id': 1},
+   'o:resource_class': None,
+   'o:resource_template': None,
+   'o:thumbnail': None,
+   'o:title': None,
+   'thumbnail_display_urls': {'large': None, 'medium': None, 'square': None},
+   'o:created': {'@value': '2022-11-15T04:07:40+00:00',
+    '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+   'o:modified': {'@value': '2022-11-15T04:07:40+00:00',
+    '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+   'o:media': [],
+   'o:item_set': [{'@id': 'https://omekas.aws.ldas.jp/sandbox/api/item_sets/187',
+     'o:id': 187}],
+   'o:site': [{'@id': 'https://omekas.aws.ldas.jp/sandbox/api/sites/1',
+     'o:id': 1},
+    {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/sites/2', 'o:id': 2}],
+   'schema:name': [{'type': 'literal',
+     'property_id': 2922,
+     'property_label': 'name',
+     'is_public': True,
+     '@value': 'My first resource!'}]},
+  {'@context': 'https://omekas.aws.ldas.jp/sandbox/api-context',
+   '@id': 'https://omekas.aws.ldas.jp/sandbox/api/items/8027',
+   '@type': 'o:Item',
+   'o:id': 8027,
+   'o:is_public': True,
+   'o:owner': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/users/1',
+    'o:id': 1},
+   'o:resource_class': None,
+   'o:resource_template': None,
+   'o:thumbnail': None,
+   'o:title': None,
+   'thumbnail_display_urls': {'large': None, 'medium': None, 'square': None},
+   'o:created': {'@value': '2022-11-15T04:08:56+00:00',
+    '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+   'o:modified': {'@value': '2022-11-15T04:08:56+00:00',
+    '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+   'o:media': [],
+   'o:item_set': [],
+   'o:site': [{'@id': 'https://omekas.aws.ldas.jp/sandbox/api/sites/1',
+     'o:id': 1},
+    {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/sites/2', 'o:id': 2}],
+   'schema:name': [{'type': 'literal',
+     'property_id': 2922,
+     'property_label': 'name',
+     'is_public': True,
+     '@value': 'My first resource!'}]},
+  {'@context': 'https://omekas.aws.ldas.jp/sandbox/api-context',
+   '@id': 'https://omekas.aws.ldas.jp/sandbox/api/items/8028',
+   '@type': 'o:Item',
+   'o:id': 8028,
+   'o:is_public': True,
+   'o:owner': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/users/1',
+    'o:id': 1},
+   'o:resource_class': None,
+   'o:resource_template': None,
+   'o:thumbnail': None,
+   'o:title': None,
+   'thumbnail_display_urls': {'large': None, 'medium': None, 'square': None},
+   'o:created': {'@value': '2022-11-15T04:08:57+00:00',
+    '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+   'o:modified': {'@value': '2022-11-15T04:08:57+00:00',
+    '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+   'o:media': [],
+   'o:item_set': [{'@id': 'https://omekas.aws.ldas.jp/sandbox/api/item_sets/187',
+     'o:id': 187}],
+   'o:site': [{'@id': 'https://omekas.aws.ldas.jp/sandbox/api/sites/1',
+     'o:id': 1},
+    {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/sites/2', 'o:id': 2}],
+   'schema:name': [{'type': 'literal',
+     'property_id': 2922,
+     'property_label': 'name',
+     'is_public': True,
+     '@value': 'My first resource!'}]}]}</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get a random item from a list of items</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> omeka_auth.filter_items_by_property(filter_property<span class="op">=</span><span class="st">'schema:name'</span>, filter_type<span class="op">=</span><span class="st">'ex'</span>)</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>random_item <span class="op">=</span> random.choice(data[<span class="st">'results'</span>])</span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Original title</span></span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> random_item[<span class="st">'schema:name'</span>][<span class="dv">0</span>][<span class="st">'@value'</span>]</span>
+<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy and update the original item</span></span>
+<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a>new_item <span class="op">=</span> deepcopy(random_item)</span>
+<span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a>new_item[<span class="st">'schema:name'</span>][<span class="dv">0</span>][<span class="st">'@value'</span>] <span class="op">=</span> title <span class="op">+</span> <span class="st">' - UPDATED!'</span></span>
+<span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-11"><a href="#cb64-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Update the item </span></span>
+<span id="cb64-12"><a href="#cb64-12" aria-hidden="true" tabindex="-1"></a>updated_item <span class="op">=</span> omeka_auth.update_resource(new_item, <span class="st">'items'</span>)</span>
+<span id="cb64-13"><a href="#cb64-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-14"><a href="#cb64-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the updated title</span></span>
+<span id="cb64-15"><a href="#cb64-15" aria-hidden="true" tabindex="-1"></a>updated_title <span class="op">=</span> updated_item[<span class="st">'schema:name'</span>][<span class="dv">0</span>][<span class="st">'@value'</span>]</span>
+<span id="cb64-16"><a href="#cb64-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(updated_title)</span>
+<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-18"><a href="#cb64-18" aria-hidden="true" tabindex="-1"></a><span class="co"># The id of the original and upated items should be the same</span></span>
+<span id="cb64-19"><a href="#cb64-19" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> random_item[<span class="st">'o:id'</span>] <span class="op">==</span> updated_item[<span class="st">'o:id'</span>]</span>
+<span id="cb64-20"><a href="#cb64-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-21"><a href="#cb64-21" aria-hidden="true" tabindex="-1"></a><span class="co"># But the titles should be different</span></span>
+<span id="cb64-22"><a href="#cb64-22" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> title <span class="op">!=</span> updated_item[<span class="st">'schema:name'</span>][<span class="dv">0</span>][<span class="st">'@value'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>My first resource! - UPDATED!</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L499" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.add_media_to_item" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.add_media_to_item">OmekaAPIClient.add_media_to_item</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.add_media_to_item (item_id, media_file, payload={},
+                                   template_id=None, class_id=None)</code></pre>
+</blockquote>
+<p>Upload a media file and associate it with an existing item.</p>
+<p>Parameters:<br>
+* <code>item_id</code> - the Omeka id of the item this media file should be added to<br>
+* <code>media_path</code> - a path to an image/media file (string or pathlib Path)<br>
+* <code>payload</code> (optional) - metadata to attach to media object, either a dict generated by <code>prepare_item_payload()</code> or <code>prepare_item_payload_using_template()</code>, or a string which is used as the value for <code>dcterms:title</code>.<br>
+* <code>template_id</code> - internal Omeka identifier of a resource template you want to attach to this item<br>
+* <code>class_id</code> - internal Omeka identifier of a resource class you want to attach to this item</p>
+<p>Returns: * a dict providing a JSON-LD representation of the new media object</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>omeka_auth <span class="op">=</span> OmekaAPIClient(</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>    api_url<span class="op">=</span>os.getenv(<span class="st">'API_URL'</span>), </span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>    key_identity<span class="op">=</span>os.getenv(<span class="st">'KEY_IDENTITY'</span>), </span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>    key_credential<span class="op">=</span>os.getenv(<span class="st">'KEY_CREDENTIAL'</span>),</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>    use_cache<span class="op">=</span><span class="va">False</span></span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Add a media file to an item without any additional metadata.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get a random item from a list of items</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> omeka_auth.get_resources(<span class="st">'items'</span>)</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>item <span class="op">=</span> random.choice(data[<span class="st">'results'</span>])</span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>item_id <span class="op">=</span> item[<span class="st">'o:id'</span>]</span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a new media file to the item</span></span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a>media_resource <span class="op">=</span> omeka_auth.add_media_to_item(item_id, <span class="st">'media/nla.news-article226799674-24144902.jpg'</span>)</span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the media resource is the expected type</span></span>
+<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> media_resource[<span class="st">'@type'</span>] <span class="op">==</span> <span class="st">'o:Media'</span></span>
+<span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-12"><a href="#cb68-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the media resource is linked to the item</span></span>
+<span id="cb68-13"><a href="#cb68-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> media_resource[<span class="st">'o:item'</span>][<span class="st">'o:id'</span>] <span class="op">==</span> item_id</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Include a title for a new media item by supplying a string value to the <code>payload</code> parameter.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a new media file with a title to the item</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>media_resource <span class="op">=</span> omeka_auth.add_media_to_item(item_id, <span class="st">'media/nla.news-article226799674-24144902.jpg'</span>, payload<span class="op">=</span><span class="st">'This has a title'</span>)</span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="co"># The title should be saved as dcterms:title</span></span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> media_resource[<span class="st">'dcterms:title'</span>][<span class="dv">0</span>][<span class="st">'@value'</span>] <span class="op">==</span> <span class="st">'This has a title'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Include more detailed metadata with a new media item by generating a payload and supplying it using the <code>payload</code> parameter.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define some metadata</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>media_metadata <span class="op">=</span> {</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'schema:name'</span>: [<span class="st">'This is a different title'</span>],</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'schema:identifier'</span>: [<span class="st">'myidis3'</span>]</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert metadata into an Omeka payload</span></span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a>media_payload <span class="op">=</span> omeka_auth.prepare_item_payload(media_metadata)</span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-10"><a href="#cb70-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a new media file with a metadata payload to the item</span></span>
+<span id="cb70-11"><a href="#cb70-11" aria-hidden="true" tabindex="-1"></a>media_resource <span class="op">=</span> omeka_auth.add_media_to_item(item_id, <span class="st">'media/nla.news-article226799674-24144902.jpg'</span>, payload<span class="op">=</span>media_payload)</span>
+<span id="cb70-12"><a href="#cb70-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-13"><a href="#cb70-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> media_resource[<span class="st">'schema:name'</span>][<span class="dv">0</span>][<span class="st">'@value'</span>] <span class="op">==</span> <span class="st">'This is a different title'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Use a specific resource template with the new media item by using the <code>template_id</code> parameter.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get a random template from a list of available templates for testing</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> omeka_auth.get_resources(<span class="st">'resource_templates'</span>)</span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>template <span class="op">=</span> random.choice(data[<span class="st">'results'</span>])</span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>template_id <span class="op">=</span> template[<span class="st">'o:id'</span>]</span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a new media file and assign it to a template using the `template_id` parameter</span></span>
+<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a>media_resource <span class="op">=</span> omeka_auth.add_media_to_item(item_id, <span class="st">'media/nla.news-article226799674-24144902.jpg'</span>, payload<span class="op">=</span>media_payload, template_id<span class="op">=</span>template_id)</span>
+<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the new media object has the correct template id</span></span>
+<span id="cb71-10"><a href="#cb71-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> media_resource[<span class="st">'o:resource_template'</span>][<span class="st">'o:id'</span>] <span class="op">==</span> template_id</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L544" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.add_iiif_to_item" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.add_iiif_to_item">OmekaAPIClient.add_iiif_to_item</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.add_iiif_to_item (item_id, iiif_url, payload={},
+                                  template_id=None, class_id=None)</code></pre>
+</blockquote>
+<p>Upload a media file and associate it with an existing item.</p>
+<p>Parameters:<br>
+* <code>item_id</code> - the Omeka id of the item this media file should be added to<br>
+* <code>iiif_url</code> - a url to a iiif image (string)<br>
+* <code>payload</code> (optional) - metadata to attach to media object, either<br>
+a dict generated by <code>prepare_item_payload()</code> or <code>prepare_item_payload_using_template()</code>, or a string which is used as the value for <code>dcterms:title</code>.<br>
+* <code>template_id</code> - internal Omeka identifier of a resource template you want to attach to this item<br>
+* <code>class_id</code> - internal Omeka identifier of a resource class you want to attach to this item</p>
+<p>Returns: * a dict providing a JSON-LD representation of the new media object</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>omeka_auth <span class="op">=</span> OmekaAPIClient(</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>    api_url<span class="op">=</span>os.getenv(<span class="st">'API_URL'</span>), </span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>    key_identity<span class="op">=</span>os.getenv(<span class="st">'KEY_IDENTITY'</span>), </span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>    key_credential<span class="op">=</span>os.getenv(<span class="st">'KEY_CREDENTIAL'</span>),</span>
+<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a>    use_cache<span class="op">=</span><span class="va">False</span></span>
+<span id="cb73-6"><a href="#cb73-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get a random item from a list of items</span></span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> omeka_auth.get_resources(<span class="st">'items'</span>)</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>item <span class="op">=</span> random.choice(data[<span class="st">'results'</span>])</span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>item_id <span class="op">=</span> item[<span class="st">'o:id'</span>]</span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a new iiif url with a title to the item</span></span>
+<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a>media_resource <span class="op">=</span> omeka_auth.add_iiif_to_item(item_id, <span class="st">'https://www.dl.ndl.go.jp/api/iiif/3437686/R0000001/info.json'</span>, payload<span class="op">=</span><span class="st">'This has a title'</span>)</span>
+<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the media resource is the expected type</span></span>
+<span id="cb74-10"><a href="#cb74-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> media_resource[<span class="st">'@type'</span>] <span class="op">==</span> <span class="st">'o:Media'</span></span>
+<span id="cb74-11"><a href="#cb74-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-12"><a href="#cb74-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the media resource is linked to the item</span></span>
+<span id="cb74-13"><a href="#cb74-13" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> media_resource[<span class="st">'o:item'</span>][<span class="st">'o:id'</span>] <span class="op">==</span> item_id</span>
+<span id="cb74-14"><a href="#cb74-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-15"><a href="#cb74-15" aria-hidden="true" tabindex="-1"></a><span class="co"># The title should be saved as dcterms:title</span></span>
+<span id="cb74-16"><a href="#cb74-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> media_resource[<span class="st">'dcterms:title'</span>][<span class="dv">0</span>][<span class="st">'@value'</span>] <span class="op">==</span> <span class="st">'This has a title'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L753" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.add_marker_to_item" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.add_marker_to_item">OmekaAPIClient.add_marker_to_item</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.add_marker_to_item (item_id, coords=None, terms=None,
+                                    label=None, media_id=None)</code></pre>
+</blockquote>
+<p>Add a map marker to an item. Requires the <code>mapping</code> module to be installed.</p>
+<p>Parameters:<br>
+* <code>item_id</code> - identifier of item to add marker to<br>
+* <code>coords</code> - list with coordinates in longitude, latitude order eg [151.209900, -33.865143]<br>
+* <code>terms</code> - list with vocab terms containing longitude and latitude values eg [‘schema:longitude’, ‘schema:latitude’]<br>
+* <code>label</code> - label for marker (defaults to item title)<br>
+* <code>media_id</code> - identifier of media resource to display with marker</p>
+<p>Returns:<br>
+* dict providing JSON-LD representation of marker</p>
+<p>The Omeka <a href="https://omeka.org/s/modules/Mapping/">Mapping</a> module lets you associate an item with a location on a map. Once you have the module installed, you can use the Omeka API to add map markers to items.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get a random item from a list of items</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> omeka_auth.get_resources(<span class="st">'items'</span>)</span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>item <span class="op">=</span> random.choice(data[<span class="st">'results'</span>])</span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a>item_id <span class="op">=</span> item[<span class="st">'o:id'</span>]</span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a marker using coords</span></span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a>marker <span class="op">=</span> omeka_auth.add_marker_to_item(item_id, coords<span class="op">=</span>[<span class="fl">151.209900</span>, <span class="op">-</span><span class="fl">33.865143</span>])</span>
+<span id="cb76-8"><a href="#cb76-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-9"><a href="#cb76-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> marker[<span class="st">'@type'</span>] <span class="op">==</span> <span class="st">'o-module-mapping:Marker'</span></span>
+<span id="cb76-10"><a href="#cb76-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> marker[<span class="st">'o:item'</span>][<span class="st">'o:id'</span>] <span class="op">==</span> item_id</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can also read the map coordinates from the item itself. By default <a href="https://nakamura196.github.io/omeka_s_tools2/api.html#omekaapiclient.add_marker_to_item"><code>OmekaAPIClient.add_marker_to_item</code></a> will look for values in <code>schema:longitude</code> and <code>schema:latitude</code>, but you can specify the vocabulary terms that you want to look for.</p>
+<p>Here we’ll create a simple item with values for <code>schema:longitude</code> and <code>schema:latitude</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>test_place <span class="op">=</span> {</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'schema:name'</span>: [</span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">'value'</span>: <span class="st">'Australia'</span></span>
+<span id="cb77-5"><a href="#cb77-5" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb77-6"><a href="#cb77-6" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb77-7"><a href="#cb77-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'schema:longitude'</span>: [</span>
+<span id="cb77-8"><a href="#cb77-8" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb77-9"><a href="#cb77-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">'value'</span>: <span class="st">'151.209900'</span></span>
+<span id="cb77-10"><a href="#cb77-10" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb77-11"><a href="#cb77-11" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb77-12"><a href="#cb77-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'schema:latitude'</span>: [</span>
+<span id="cb77-13"><a href="#cb77-13" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb77-14"><a href="#cb77-14" aria-hidden="true" tabindex="-1"></a>            <span class="st">'value'</span>: <span class="st">'-33.865143'</span></span>
+<span id="cb77-15"><a href="#cb77-15" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb77-16"><a href="#cb77-16" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb77-17"><a href="#cb77-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb77-18"><a href="#cb77-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb77-19"><a href="#cb77-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb77-20"><a href="#cb77-20" aria-hidden="true" tabindex="-1"></a>payload <span class="op">=</span> omeka_auth.prepare_item_payload(test_place)</span>
+<span id="cb77-21"><a href="#cb77-21" aria-hidden="true" tabindex="-1"></a>new_place <span class="op">=</span> omeka_auth.add_item(payload)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can just call <a href="https://nakamura196.github.io/omeka_s_tools2/api.html#omekaapiclient.add_marker_to_item"><code>OmekaAPIClient.add_marker_to_item</code></a> without any coordinates, and it will get them from <code>schema:longitude</code> and <code>schema:latitude</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>new_marker <span class="op">=</span> omeka_auth.add_marker_to_item(new_place[<span class="st">'o:id'</span>])</span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> new_marker[<span class="st">'@type'</span>] <span class="op">==</span> <span class="st">'o-module-mapping:Marker'</span></span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> new_marker[<span class="st">'o:item'</span>][<span class="st">'o:id'</span>] <span class="op">==</span> new_place[<span class="st">'o:id'</span>]</span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> new_marker[<span class="st">'o-module-mapping:lat'</span>] <span class="op">==</span> <span class="op">-</span><span class="fl">33.865143</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="managing-templates" class="level2">
+<h2 class="anchored" data-anchor-id="managing-templates">Managing templates</h2>
+<p>Resource templates can be exported from one Omeka instance and imported into another. This is a really useful way of sharing and resuing data structures. However, exported templates can’t be uploaded via the API without some modification, as they don’t include Omeka numeric identifiers for referenced classes and properties. Before uploading them, we need to find the referenced classes and properties in the local Omeka instance, and insert the local identifiers into the payload.</p>
+<p>Similarly, if custom vocabs are referenced in the exported template, they will need to be updated to include the vocab’s identifier in the new Omeka instance. Of course, you’ll need to make sure it’s installed first.</p>
+<p>In general, you want to make sure that the any vocabs and data types referenced by the exported templates will be available in the new Omeka instance. So before you upload any templates you should check that:</p>
+<ul>
+<li>referenced vocabularies are already installed</li>
+<li>modules used in defining data types are installed ( eg the <a href="https://omeka.org/s/modules/NumericDataTypes/">Numeric Data Types</a> module provides additional data types such as <code>Timestamp</code> for dates</li>
+<li>any custom vocabularies (created using the <a href="https://omeka.org/s/modules/CustomVocab/">Custom Vocab</a> are installed, along with the module itself of course</li>
+<li>the <a href="https://omeka.org/s/modules/ValueSuggest/">Value Suggest</a> module is installed if the template includes references to the controlled vocabs it provides</li>
+</ul>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L655" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="omekaapiclient.prepare_template_payload" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.prepare_template_payload">OmekaAPIClient.prepare_template_payload</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.prepare_template_payload (template_file)</code></pre>
+</blockquote>
+<p>Insert local property, class, and vocab identifiers into a resource template exported from Omeka so that it can be uploaded to the local instance.</p>
+<p>Parameters:<br>
+* <code>template_file</code> - path to a template exported from Omeka (str or pathlib Path)</p>
+<p>Returns:<br>
+* template payload with local identifiers inserted</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>omeka_auth <span class="op">=</span> OmekaAPIClient(</span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>    api_url<span class="op">=</span>os.getenv(<span class="st">'API_URL'</span>), </span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>    key_identity<span class="op">=</span>os.getenv(<span class="st">'KEY_IDENTITY'</span>), </span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a>    key_credential<span class="op">=</span>os.getenv(<span class="st">'KEY_CREDENTIAL'</span>),</span>
+<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a>    use_cache<span class="op">=</span><span class="va">False</span></span>
+<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>template_payload <span class="op">=</span> omeka_auth.prepare_template_payload(<span class="st">'templates/Person.json'</span>)</span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the label</span></span>
+<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> template_payload[<span class="st">'o:label'</span>] <span class="op">==</span> <span class="st">'Person'</span></span>
+<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-6"><a href="#cb81-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that there is a list of properties</span></span>
+<span id="cb81-7"><a href="#cb81-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(template_payload[<span class="st">'o:resource_template_property'</span>]) <span class="op">&gt;</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L708" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.upload_template" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.upload_template">OmekaAPIClient.upload_template</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.upload_template (template_payload)</code></pre>
+</blockquote>
+<p>Upload a template exported from an instance of Omeka to the current local instance.</p>
+<p>Parameters:<br>
+* <code>template_payload</code> - dict payload generated by <code>prepare_template_payload</code></p>
+<p>Return:<br>
+* dict containing a JSON-LD representation of the uploaded template</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First we'll check to see if there's already a template with the label 'Person'</span></span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>existing_template <span class="op">=</span> omeka_auth.get_template_by_label(<span class="st">'Person'</span>)</span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a><span class="co"># If there is we'll delete it</span></span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Trying to upload a template with the same label as an existing template will generate an error</span></span>
+<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> existing_template:</span>
+<span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a>    deleted <span class="op">=</span> omeka_auth.delete_resource(existing_template[<span class="st">'o:id'</span>], <span class="st">'resource_templates'</span>)</span>
+<span id="cb83-8"><a href="#cb83-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-9"><a href="#cb83-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Now we can add the new template</span></span>
+<span id="cb83-10"><a href="#cb83-10" aria-hidden="true" tabindex="-1"></a>template_payload <span class="op">=</span> omeka_auth.prepare_template_payload(<span class="st">'templates/Person.json'</span>)</span>
+<span id="cb83-11"><a href="#cb83-11" aria-hidden="true" tabindex="-1"></a>new_template <span class="op">=</span> omeka_auth.upload_template(template_payload)</span>
+<span id="cb83-12"><a href="#cb83-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-13"><a href="#cb83-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Result should be a 'ResourceTemplate</span></span>
+<span id="cb83-14"><a href="#cb83-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> new_template[<span class="st">'@type'</span>] <span class="op">==</span> <span class="st">'o:ResourceTemplate'</span></span>
+<span id="cb83-15"><a href="#cb83-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-16"><a href="#cb83-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Label should be 'Person'</span></span>
+<span id="cb83-17"><a href="#cb83-17" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> new_template[<span class="st">'o:label'</span>] <span class="op">==</span> <span class="st">'Person'</span></span>
+<span id="cb83-18"><a href="#cb83-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-19"><a href="#cb83-19" aria-hidden="true" tabindex="-1"></a><span class="co"># It should have properties</span></span>
+<span id="cb83-20"><a href="#cb83-20" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">len</span>(new_template[<span class="st">'o:resource_template_property'</span>]) <span class="op">&gt;</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;Response [200]&gt;</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L588" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.localise_custom_vocabs" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.localise_custom_vocabs">OmekaAPIClient.localise_custom_vocabs</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.localise_custom_vocabs (data_types)</code></pre>
+</blockquote>
+<p>Check a list of data types for references to custom vocabs. If found, look for the local identifier of the custom vocab, and insert it into the data type information.<br>
+Requires the <code>customvocab</code> module to be installed.</p>
+<p>Parameters:<br>
+* <code>data_types</code> - a list of data types from an exported template property</p>
+<p>Returns:<br>
+* list of datatypes with local identifiers</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data type example with ridiculously high customvocab id value</span></span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>data_types <span class="op">=</span> [{<span class="st">'name'</span>: <span class="st">'customvocab:200000'</span>, <span class="st">'label'</span>: <span class="st">"Date qualifiers"</span>}]</span>
+<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Localise!</span></span>
+<span id="cb86-5"><a href="#cb86-5" aria-hidden="true" tabindex="-1"></a>localised_data_types <span class="op">=</span> omeka_auth.localise_custom_vocabs(data_types)</span>
+<span id="cb86-6"><a href="#cb86-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(localised_data_types)</span>
+<span id="cb86-7"><a href="#cb86-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb86-8"><a href="#cb86-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(localised_data_types) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb86-9"><a href="#cb86-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb86-10"><a href="#cb86-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Localised data type should start with 'customvocab'</span></span>
+<span id="cb86-11"><a href="#cb86-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> localised_data_types[<span class="dv">0</span>].startswith(<span class="st">'customvocab:'</span>)</span>
+<span id="cb86-12"><a href="#cb86-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb86-13"><a href="#cb86-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The localised customvocab id should not be the same as the supplied one</span></span>
+<span id="cb86-14"><a href="#cb86-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> localised_data_types[<span class="dv">0</span>] <span class="op">!=</span> data_types[<span class="dv">0</span>][<span class="st">'name'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['customvocab:1']</code></pre>
+</div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L614" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.get_template_class_id" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.get_template_class_id">OmekaAPIClient.get_template_class_id</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.get_template_class_id (template)</code></pre>
+</blockquote>
+<p>Get the local id of the resource class associated with the supplied template.</p>
+<p>Parameters:<br>
+* <code>template</code> - dict from exported template</p>
+<p>Returns:<br>
+* class identifier</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load template from filesystem</span></span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>template <span class="op">=</span> json.loads(Path(<span class="st">'templates/Person.json'</span>).read_bytes())</span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a>person_class_id <span class="op">=</span> omeka_auth.get_resource_by_term(<span class="st">'schema:Person'</span>, <span class="st">'resource_classes'</span>)[<span class="st">'o:id'</span>]</span>
+<span id="cb89-5"><a href="#cb89-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-6"><a href="#cb89-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Get resource id</span></span>
+<span id="cb89-7"><a href="#cb89-7" aria-hidden="true" tabindex="-1"></a>class_id <span class="op">=</span> omeka_auth.get_template_class_id(template)</span>
+<span id="cb89-8"><a href="#cb89-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-9"><a href="#cb89-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> class_id <span class="op">==</span> person_class_id</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L634" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.get_template_property_id" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.get_template_property_id">OmekaAPIClient.get_template_property_id</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.get_template_property_id (template, term)</code></pre>
+</blockquote>
+<p>Get the local id of the property associated with the supplied template.</p>
+<p>Parameters:<br>
+* <code>template</code> - dict from exported template<br>
+* <code>term</code> - property term (eg ‘o:title_property’)</p>
+<p>Returns:<br>
+* property identifier</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load template from filesystem</span></span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a>template <span class="op">=</span> json.loads(Path(<span class="st">'templates/Person.json'</span>).read_bytes())</span>
+<span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-4"><a href="#cb91-4" aria-hidden="true" tabindex="-1"></a><span class="co"># get the id of the schema:name property</span></span>
+<span id="cb91-5"><a href="#cb91-5" aria-hidden="true" tabindex="-1"></a>name_prop_id <span class="op">=</span> omeka_auth.get_resource_by_term(<span class="st">'schema:name'</span>, <span class="st">'properties'</span>)[<span class="st">'o:id'</span>]</span>
+<span id="cb91-6"><a href="#cb91-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-7"><a href="#cb91-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Get id of template property used for title</span></span>
+<span id="cb91-8"><a href="#cb91-8" aria-hidden="true" tabindex="-1"></a>prop_id <span class="op">=</span> omeka_auth.get_template_property_id(template, <span class="st">'o:title_property'</span>)</span>
+<span id="cb91-9"><a href="#cb91-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-10"><a href="#cb91-10" aria-hidden="true" tabindex="-1"></a><span class="co"># The ids should be the same</span></span>
+<span id="cb91-11"><a href="#cb91-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> prop_id <span class="op">==</span> name_prop_id</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="adding-item-sets" class="level2">
+<h2 class="anchored" data-anchor-id="adding-item-sets">Adding item sets</h2>
+<p>To add resources to Omeka you need authenticate your API requests by supplying <code>key_identity</code> and <code>key_credential</code> tokens as parameters.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>omeka_auth <span class="op">=</span> OmekaAPIClient(</span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># api_url='https://timsherratt.org/collections/api',</span></span>
+<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a>    api_url<span class="op">=</span>os.getenv(<span class="st">'API_URL'</span>),</span>
+<span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a>    key_identity<span class="op">=</span>os.getenv(<span class="st">'KEY_IDENTITY'</span>), </span>
+<span id="cb92-5"><a href="#cb92-5" aria-hidden="true" tabindex="-1"></a>    key_credential<span class="op">=</span>os.getenv(<span class="st">'KEY_CREDENTIAL'</span>),</span>
+<span id="cb92-6"><a href="#cb92-6" aria-hidden="true" tabindex="-1"></a>    use_cache<span class="op">=</span><span class="va">False</span></span>
+<span id="cb92-7"><a href="#cb92-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There are two stages in creating a new item set:</p>
+<ul>
+<li>prepare a payload containing the item set data in the format expected by Omeka</li>
+<li>upload the payload to Omeka</li>
+</ul>
+<section id="prepare-an-item-set-payload" class="level3">
+<h3 class="anchored" data-anchor-id="prepare-an-item-set-payload">Prepare an item set payload</h3>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L344" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.prepare_item_payload-1" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.prepare_item_payload-1">OmekaAPIClient.prepare_item_payload</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.prepare_item_payload (terms)</code></pre>
+</blockquote>
+<p>Prepare an item payload, ready for upload.</p>
+<p>Parameters:<br>
+* <code>terms</code>: a dict of terms, values, and (optionally) data types</p>
+<p>Returns:<br>
+* the payload dict</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>test_item_set <span class="op">=</span> {</span>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'dcterms:title'</span>: [</span>
+<span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb94-4"><a href="#cb94-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">'value'</span>: <span class="st">'My first item set!'</span></span>
+<span id="cb94-5"><a href="#cb94-5" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb94-6"><a href="#cb94-6" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb94-7"><a href="#cb94-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>payload <span class="op">=</span> omeka_auth.prepare_item_payload(test_item_set)</span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a>payload</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'dcterms:title': [{'property_id': 1,
+   'type': 'literal',
+   '@value': 'My first item set!'}]}</code></pre>
+</div>
+</div>
+</section>
+<section id="upload-the-payload-to-omeka-and-create-a-new-item-set" class="level3">
+<h3 class="anchored" data-anchor-id="upload-the-payload-to-omeka-and-create-a-new-item-set">Upload the payload to Omeka and create a new item set</h3>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L725" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.add_item_set" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.add_item_set">OmekaAPIClient.add_item_set</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.add_item_set (payload, template_id=None, class_id=None)</code></pre>
+</blockquote>
+<p>Create a new item from the supplied payload, optionally uploading attached media files.</p>
+<p>Parameters:<br>
+* <code>payload</code> - a dict generated by <code>prepare_item_payload()</code> or <code>prepare_item_payload_using_template()</code><br>
+* <code>template_id</code> - internal Omeka identifier of a resource template you want to attach to this item<br>
+* <code>class_id</code> - internal Omeka identifier of a resource class you want to attach to this item</p>
+<p>Returns:<br>
+* a dict providing the JSON-LD representation of the new item from Omeka</p>
+</section>
+<section id="add-a-simple-item-set" class="level3">
+<h3 class="anchored" data-anchor-id="add-a-simple-item-set">Add a simple item set</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>new_item_set <span class="op">=</span> omeka_auth.add_item_set(payload)</span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>new_item_set</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'@context': 'https://omekas.aws.ldas.jp/sandbox/api-context',
+ '@id': 'https://omekas.aws.ldas.jp/sandbox/api/item_sets/8035',
+ '@type': 'o:ItemSet',
+ 'o:id': 8035,
+ 'o:is_public': True,
+ 'o:owner': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/users/1',
+  'o:id': 1},
+ 'o:resource_class': None,
+ 'o:resource_template': None,
+ 'o:thumbnail': None,
+ 'o:title': 'My first item set!',
+ 'thumbnail_display_urls': {'large': None, 'medium': None, 'square': None},
+ 'o:created': {'@value': '2022-11-15T04:09:57+00:00',
+  '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+ 'o:modified': {'@value': '2022-11-15T04:09:57+00:00',
+  '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+ 'o:is_open': False,
+ 'o:items': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/items?item_set_id=8035'},
+ 'dcterms:title': [{'type': 'literal',
+   'property_id': 1,
+   'property_label': 'Title',
+   'is_public': True,
+   '@value': 'My first item set!'}]}</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="utilities" class="level2">
+<h2 class="anchored" data-anchor-id="utilities">Utilities</h2>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L52" target="_blank" style="float:right; font-size:smaller">source</a></p>
+<section id="omekaapiclient.format_resource_id" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.format_resource_id">OmekaAPIClient.format_resource_id</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.format_resource_id (resource_id, resource_type)</code></pre>
+</blockquote>
+<p>Generate a formatted id for the resource with the specified Omeka id number and resource type.</p>
+<p>Parameters:<br>
+* <code>resource_id</code> - numeric identifier used by Omeka for this resource<br>
+* <code>resource_type</code> - one of Omeka’s resource types, eg: ‘items’, ‘properties’</p>
+<p>Returns: * a dict with values for ‘<span class="citation" data-cites="id">@id</span>’ and ‘o:id’</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a>id_url <span class="op">=</span> omeka.format_resource_id(<span class="dv">5</span>, <span class="st">'resource_templates'</span>)</span>
+<span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a>api_url <span class="op">=</span> os.getenv(<span class="st">'API_URL'</span>)</span>
+<span id="cb101-4"><a href="#cb101-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-5"><a href="#cb101-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> id_url <span class="op">==</span> {</span>
+<span id="cb101-6"><a href="#cb101-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'@id'</span>: <span class="ss">f'</span><span class="sc">{</span>api_url<span class="sc">}</span><span class="ss">/resource_templates/5'</span>,</span>
+<span id="cb101-7"><a href="#cb101-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'o:id'</span>: <span class="dv">5</span></span>
+<span id="cb101-8"><a href="#cb101-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L272" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.prepare_property_value" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.prepare_property_value">OmekaAPIClient.prepare_property_value</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.prepare_property_value (value, property_id)</code></pre>
+</blockquote>
+<p>Formats a property value according to its datatype as expected by Omeka.<br>
+The formatted value can be used in a payload to create a new item.</p>
+<p>Parameters:<br>
+* <code>value</code> - a dict containing a <code>value</code> and (optionally) a <code>type</code> and <code>lang</code><br>
+* <code>property_id</code> - the numeric identifier of the property</p>
+<p>Note that is no <code>type</code> is supplied, ‘literal’ will be used by default.</p>
+<p>Returns: * a dict with values for <code>property_id</code>, <code>type</code>, and either <code>@id</code> or <code>@value</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a>prop_id <span class="op">=</span> omeka_auth.get_property_id(<span class="st">'schema:url'</span>)</span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a>prop_value <span class="op">=</span> {<span class="st">'value'</span>: <span class="st">'https://glam-workbench.net'</span>, <span class="st">'type'</span>: <span class="st">'uri'</span>}</span>
+<span id="cb103-3"><a href="#cb103-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-4"><a href="#cb103-4" aria-hidden="true" tabindex="-1"></a>formatted_prop <span class="op">=</span> omeka_auth.prepare_property_value(prop_value, prop_id)</span>
+<span id="cb103-5"><a href="#cb103-5" aria-hidden="true" tabindex="-1"></a>formatted_prop</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'property_id': 2995, 'type': 'uri', '@id': 'https://glam-workbench.net'}</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> prop_id <span class="op">==</span> formatted_prop[<span class="st">'property_id'</span>]</span>
+<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">'type'</span> <span class="kw">in</span> formatted_prop</span>
+<span id="cb105-3"><a href="#cb105-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> formatted_prop[<span class="st">'@id'</span>] <span class="op">==</span> <span class="st">'https://glam-workbench.net'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><a href="https://github.com/nakamura196/omeka_s_tools2/blob/main/omeka_s_tools2/api.py#L244" target="_blank" style="float:right; font-size:smaller">source</a></p>
+</section>
+<section id="omekaapiclient.get_template_properties" class="level3">
+<h3 class="anchored" data-anchor-id="omekaapiclient.get_template_properties">OmekaAPIClient.get_template_properties</h3>
+<blockquote class="blockquote">
+<pre><code> OmekaAPIClient.get_template_properties (template_id)</code></pre>
+</blockquote>
+<p>List properties used by the specified template.</p>
+<p>The resource template objects returned by the API don’t include property terms.<br>
+This function gets the additional details, and organises the properties in a dictionary, organised by term. This makes it easy to check if a particular term is used by a template.</p>
+<p>Parameters:<br>
+* <code>template_id</code> - numeric identifier for a template</p>
+<p>Returns:<br>
+* a dict organised by property terms, with values for <code>property_id</code> and <code>type</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>template_id <span class="op">=</span> omeka_auth.get_template_by_label(<span class="st">'Newspaper'</span>)[<span class="st">'o:id'</span>]</span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>newspaper_properties <span class="op">=</span> omeka_auth.get_template_properties(template_id)</span>
+<span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb107-4"><a href="#cb107-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">'schema:name'</span> <span class="kw">in</span> newspaper_properties</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="example-adding-a-newspaper-article-from-trove" class="level2">
+<h2 class="anchored" data-anchor-id="example-adding-a-newspaper-article-from-trove">Example: adding a newspaper article from Trove</h2>
+<p>In the example below I’m going to manually step through the process of adding a new item to Omeka using the API in order to demonstrate the methods available. But of course the point of using the API is to automate such processes – joining together the individual steps so they can be embedded into your own systems or workflows. For a more detailed example that uploads Trove newspaper articles from a variety of sources, including Trove searches, Trove lists, and Zotero libraries, see the <a href="https://glam-workbench.net/trove-newspapers/#upload-trove-newspaper-articles-to-omeka-s">GLAM Workbench</a>.</p>
+<p>Let’s suppose we want to add <a href="http://nla.gov.au/nla.news-article226799674">this newspaper article</a> in Trove to our Omeka instance. To take best advantage of Omeka’s linked data infrastructure, we’ll actually create two resources – one for the article, and one for the newspaper it was published in.</p>
+<p>I’ve already created templates labelled ‘Newspaper’ and ‘Newspaper article’.</p>
+<p>Let’s start with the newspaper. First we need to find out the numeric identifier Omeka is using for the Newspaper template. We can use <a href="https://nakamura196.github.io/omeka_s_tools2/api.html#omekaapiclient.get_template_by_label"><code>OmekaAPIClient.get_template_by_label</code></a> to find out.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a>omeka_auth <span class="op">=</span> OmekaAPIClient(</span>
+<span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a>    api_url<span class="op">=</span>os.getenv(<span class="st">'API_URL'</span>), </span>
+<span id="cb108-3"><a href="#cb108-3" aria-hidden="true" tabindex="-1"></a>    key_identity<span class="op">=</span>os.getenv(<span class="st">'KEY_IDENTITY'</span>), </span>
+<span id="cb108-4"><a href="#cb108-4" aria-hidden="true" tabindex="-1"></a>    key_credential<span class="op">=</span>os.getenv(<span class="st">'KEY_CREDENTIAL'</span>),</span>
+<span id="cb108-5"><a href="#cb108-5" aria-hidden="true" tabindex="-1"></a>    use_cache<span class="op">=</span><span class="va">False</span></span>
+<span id="cb108-6"><a href="#cb108-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb108-7"><a href="#cb108-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb108-8"><a href="#cb108-8" aria-hidden="true" tabindex="-1"></a>newspaper_template_id <span class="op">=</span> omeka_auth.get_template_by_label(<span class="st">'Newspaper'</span>)[<span class="st">'o:id'</span>]</span>
+<span id="cb108-9"><a href="#cb108-9" aria-hidden="true" tabindex="-1"></a>newspaper_template_id</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>2</code></pre>
+</div>
+</div>
+<p>For convenience, we can get a summary of the properties used in the Newspaper template using <a href="https://nakamura196.github.io/omeka_s_tools2/api.html#omekaapiclient.get_template_properties"><code>OmekaAPIClient.get_template_properties</code></a>. This is useful if we want to check which properties are in use, and what data types are expected.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a>omeka_auth.get_template_properties(newspaper_template_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'dcterms:title': {'property_id': 1,
+  'type': ['literal', 'uri', 'resource:item']},
+ 'dcterms:description': {'property_id': 4,
+  'type': ['literal', 'uri', 'resource:item']},
+ 'schema:name': {'property_id': 2922,
+  'type': ['literal', 'uri', 'resource:item']}}</code></pre>
+</div>
+</div>
+<p>The first step in preparing our data for upload is to create a dictionary, using the required property terms as keys. In this case, we’ll assign data about the newspaper to <code>schema.name</code> and <code>schema.url</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a>newspaper <span class="op">=</span> {</span>
+<span id="cb112-2"><a href="#cb112-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'schema.name'</span>: [</span>
+<span id="cb112-3"><a href="#cb112-3" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb112-4"><a href="#cb112-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">'type'</span>: <span class="st">'literal'</span>,</span>
+<span id="cb112-5"><a href="#cb112-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">'value'</span>: <span class="st">'The Bendigo Independent (Vic. : 1891 - 1918)'</span></span>
+<span id="cb112-6"><a href="#cb112-6" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb112-7"><a href="#cb112-7" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb112-8"><a href="#cb112-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'schema:url'</span>: [</span>
+<span id="cb112-9"><a href="#cb112-9" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb112-10"><a href="#cb112-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">'type'</span>: <span class="st">'literal'</span>,</span>
+<span id="cb112-11"><a href="#cb112-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">'value'</span>: <span class="st">'http://nla.gov.au/nla.news-title806'</span></span>
+<span id="cb112-12"><a href="#cb112-12" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb112-13"><a href="#cb112-13" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb112-14"><a href="#cb112-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can use this data to create a payload for upload to Omeka. <a href="https://nakamura196.github.io/omeka_s_tools2/api.html#omekaapiclient.prepare_item_payload_using_template"><code>OmekaAPIClient.prepare_item_payload_using_template</code></a> will check our data against the Newspaper template and build the payload.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a>payload <span class="op">=</span> omeka_auth.prepare_item_payload_using_template(newspaper, newspaper_template_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Term schema.name not in template
+Term schema:url not in template</code></pre>
+</div>
+</div>
+<p>Whoops! It seems we have some problems with our data file! First of all we’ve used a full stop, rather than a colon in <code>schema:name</code>. Second, we’ve said the data type of <code>schema:url</code> is ‘literal’, but if we check the template properties we’ll see it’ should be ‘uri’. Let’s make these changes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a>newspaper <span class="op">=</span> {</span>
+<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'schema:name'</span>: [</span>
+<span id="cb115-3"><a href="#cb115-3" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb115-4"><a href="#cb115-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">'type'</span>: <span class="st">'literal'</span>,</span>
+<span id="cb115-5"><a href="#cb115-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">'value'</span>: <span class="st">'The Bendigo Independent (Vic. : 1891 - 1918)'</span></span>
+<span id="cb115-6"><a href="#cb115-6" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb115-7"><a href="#cb115-7" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb115-8"><a href="#cb115-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'schema:url'</span>: [</span>
+<span id="cb115-9"><a href="#cb115-9" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb115-10"><a href="#cb115-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">'type'</span>: <span class="st">'uri'</span>,</span>
+<span id="cb115-11"><a href="#cb115-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">'value'</span>: <span class="st">'http://nla.gov.au/nla.news-title806'</span></span>
+<span id="cb115-12"><a href="#cb115-12" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb115-13"><a href="#cb115-13" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb115-14"><a href="#cb115-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a>payload <span class="op">=</span> omeka_auth.prepare_item_payload_using_template(newspaper, newspaper_template_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Term schema:url not in template</code></pre>
+</div>
+</div>
+<p>That seems better! Now we can examine the payload.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a>payload</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'schema:name': [{'property_id': 2922,
+   'type': 'literal',
+   '@value': 'The Bendigo Independent (Vic. : 1891 - 1918)'}]}</code></pre>
+</div>
+</div>
+<p>Notice how the values have been reformatted? They should now be ready to upload to Omeka using <a href="https://nakamura196.github.io/omeka_s_tools2/api.html#omekaapiclient.add_item"><code>OmekaAPIClient.add_item</code></a>. We’ll supply both the payload and the newspaper template id.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a>newspaper_item <span class="op">=</span> omeka_auth.add_item(payload, template_id<span class="op">=</span>newspaper_template_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can check the contents of <code>newspaper_item</code> to make sure it’s been added succesfully.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a>newspaper_item</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'@context': 'https://omekas.aws.ldas.jp/sandbox/api-context',
+ '@id': 'https://omekas.aws.ldas.jp/sandbox/api/items/8036',
+ '@type': ['o:Item', 'dctype:Image'],
+ 'o:id': 8036,
+ 'o:is_public': True,
+ 'o:owner': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/users/1',
+  'o:id': 1},
+ 'o:resource_class': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/resource_classes/26',
+  'o:id': 26},
+ 'o:resource_template': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/resource_templates/2',
+  'o:id': 2},
+ 'o:thumbnail': None,
+ 'o:title': None,
+ 'thumbnail_display_urls': {'large': None, 'medium': None, 'square': None},
+ 'o:created': {'@value': '2022-11-15T04:10:04+00:00',
+  '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+ 'o:modified': {'@value': '2022-11-15T04:10:04+00:00',
+  '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+ 'o:media': [],
+ 'o:item_set': [],
+ 'o:site': [{'@id': 'https://omekas.aws.ldas.jp/sandbox/api/sites/1',
+   'o:id': 1},
+  {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/sites/2', 'o:id': 2}],
+ 'schema:name': [{'type': 'literal',
+   'property_id': 2922,
+   'property_label': 'name',
+   'is_public': True,
+   '@value': 'The Bendigo Independent (Vic. : 1891 - 1918)'}]}</code></pre>
+</div>
+</div>
+<p>Great! Now what about the article? Again let’s start by having a look at the ‘Newspaper article’ template.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a>article_template_id <span class="op">=</span> omeka_auth.get_template_by_label(<span class="st">'Newspaper article'</span>)[<span class="st">'o:id'</span>]</span>
+<span id="cb123-2"><a href="#cb123-2" aria-hidden="true" tabindex="-1"></a>omeka_auth.get_template_properties(article_template_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'dcterms:title': {'property_id': 1,
+  'type': ['literal', 'uri', 'resource:item']},
+ 'dcterms:description': {'property_id': 4,
+  'type': ['literal', 'uri', 'resource:item']},
+ 'schema:name': {'property_id': 2922,
+  'type': ['literal', 'uri', 'resource:item']},
+ 'schema:isPartOf': {'property_id': 2271,
+  'type': ['literal', 'uri', 'resource:item']},
+ 'schema:datePublished': {'property_id': 2027,
+  'type': ['literal', 'uri', 'resource:item']},
+ 'schema:url': {'property_id': 2995,
+  'type': ['literal', 'uri', 'resource:item']}}</code></pre>
+</div>
+</div>
+<p>This time we’ll build our data file in stages.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb125"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb125-1"><a href="#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an empty dictionary</span></span>
+<span id="cb125-2"><a href="#cb125-2" aria-hidden="true" tabindex="-1"></a>article <span class="op">=</span> {}</span>
+<span id="cb125-3"><a href="#cb125-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb125-4"><a href="#cb125-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add value for schema:name</span></span>
+<span id="cb125-5"><a href="#cb125-5" aria-hidden="true" tabindex="-1"></a>article[<span class="st">'schema:name'</span>] <span class="op">=</span> [<span class="st">"MR nakamura196'S PREDICTION. RENEWAL OF CYCLONE FORETOLD."</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You’ll notice that this time I’ve only included the value of the property, not the data type. This is because <a href="https://nakamura196.github.io/omeka_s_tools2/api.html#omekaapiclient.prepare_item_payload_using_template"><code>OmekaAPIClient.prepare_item_payload_using_template</code></a> will insert default data types if they’re not specified. The basic rules it uses if you don’t supply a data type are:</p>
+<ul>
+<li>if the template defines a default data type, use that</li>
+<li>if ‘literal’ is in the template’s list of expected data types, use that</li>
+<li>if ‘literal’ is not in the template’s list of expected data types print a warning asking the user to specify a data type and drop the property from the payload</li>
+</ul>
+<p>In the case above, the ‘literal’ data type will be assigned to the <code>schema:name</code> value.</p>
+<p>To create a link between the article and the newspaper it was published in, we can use <code>schema.isPartOf</code>. If we look in the list of template properties we see that this property expects a data type of ‘resource:item’.</p>
+<pre><code>'schema:isPartOf': {'property_id': 736, 'type': ['resource:item']}</code></pre>
+<p>The ‘resource:item’ data type means that the value will be an identifier pointing to another Omeka item. So we include the identifier of the newly-created newspaper record. Once again, the data type will be automatically added when we generate the payload.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a>article[<span class="st">'schema:isPartOf'</span>] <span class="op">=</span> [newspaper_item[<span class="st">'o:id'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next we’ll add the publication date. To recognise dates as specific data types, you need to install the <a href="https://omeka.org/s/modules/NumericDataTypes/">Numeric Data Types</a> module. Once that’s done, you can set the ‘numeric:timestamp’ data type as the default for any date fields in your template. In the list of properties from the newspaper article template, you can see:</p>
+<pre><code>'schema:datePublished': {'property_id': 928, 'type': ['numeric:timestamp']}</code></pre>
+<p>The date value itself is supplied in a standard ISO format – ‘YYYY-MM-DD’.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb129"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a>article[<span class="st">'schema:datePublished'</span>] <span class="op">=</span> [<span class="st">'1918-03-14'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally we’ll add a link to the article. Once again the template includes a default data type.</p>
+<pre><code>'schema:url': {'property_id': 393, 'type': ['uri']}</code></pre>
+<p>So we can just include the value.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb131"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb131-1"><a href="#cb131-1" aria-hidden="true" tabindex="-1"></a>article[<span class="st">'schema:url'</span>] <span class="op">=</span> [<span class="st">'http://nla.gov.au/nla.news-article226799674'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now that we’ve assembled the article metadata, we can generate a payload.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb132"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a>article_payload <span class="op">=</span> omeka_auth.prepare_item_payload_using_template(article, article_template_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As you can see below, the default data types have been inserted into the payload, and some additional fields have been added to define the link to the newspaper item.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb133"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a>article_payload</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'schema:name': [{'property_id': 2922,
+   'type': 'literal',
+   '@value': "MR nakamura196'S PREDICTION. RENEWAL OF CYCLONE FORETOLD."}],
+ 'schema:isPartOf': [{'property_id': 2271, 'type': 'literal', '@value': 8036}],
+ 'schema:datePublished': [{'property_id': 2027,
+   'type': 'literal',
+   '@value': '1918-03-14'}],
+ 'schema:url': [{'property_id': 2995,
+   'type': 'literal',
+   '@value': 'http://nla.gov.au/nla.news-article226799674'}]}</code></pre>
+</div>
+</div>
+<p>We could now go ahead and upload the payload to Omeka, but what if we want to include media files? In this case I have a JPG image of the article I want to attach. All you need to do is supply a list of paths pointing to media files using the <code>media_files</code> parameter. The list can just include the paths as strings, in which case the file name will be used as the media object’s title. Alternatively, you can supply a list of dicts, each containing a <code>path</code> and <code>title</code> value.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb135"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a list of paths pointing to media files</span></span>
+<span id="cb135-2"><a href="#cb135-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The paths can be strings or pathlib Paths</span></span>
+<span id="cb135-3"><a href="#cb135-3" aria-hidden="true" tabindex="-1"></a>media_files <span class="op">=</span> [<span class="st">'media/nla.news-article226799674-24144902.jpg'</span>]</span>
+<span id="cb135-4"><a href="#cb135-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb135-5"><a href="#cb135-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Include the media files when we upload the payload</span></span>
+<span id="cb135-6"><a href="#cb135-6" aria-hidden="true" tabindex="-1"></a>article_item <span class="op">=</span> omeka_auth.add_item(article_payload, media_files<span class="op">=</span>media_files, template_id<span class="op">=</span>article_template_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When we look at the uploaded item, we’ll see that the media files have been processed and added to the record.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb136"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb136-1"><a href="#cb136-1" aria-hidden="true" tabindex="-1"></a>article_item</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>{'@context': 'https://omekas.aws.ldas.jp/sandbox/api-context',
+ '@id': 'https://omekas.aws.ldas.jp/sandbox/api/items/8037',
+ '@type': ['o:Item', 'dctype:Image'],
+ 'o:id': 8037,
+ 'o:is_public': True,
+ 'o:owner': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/users/1',
+  'o:id': 1},
+ 'o:resource_class': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/resource_classes/26',
+  'o:id': 26},
+ 'o:resource_template': {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/resource_templates/4',
+  'o:id': 4},
+ 'o:thumbnail': None,
+ 'o:title': None,
+ 'thumbnail_display_urls': {'large': 'https://omekas.aws.ldas.jp/sandbox/files/large/a4ea085cb0ad5ff1000f1e33092eeb15e4fbf107.jpg',
+  'medium': 'https://omekas.aws.ldas.jp/sandbox/files/medium/a4ea085cb0ad5ff1000f1e33092eeb15e4fbf107.jpg',
+  'square': 'https://omekas.aws.ldas.jp/sandbox/files/square/a4ea085cb0ad5ff1000f1e33092eeb15e4fbf107.jpg'},
+ 'o:created': {'@value': '2022-11-15T04:10:10+00:00',
+  '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+ 'o:modified': {'@value': '2022-11-15T04:10:10+00:00',
+  '@type': 'http://www.w3.org/2001/XMLSchema#dateTime'},
+ 'o:media': [{'@id': 'https://omekas.aws.ldas.jp/sandbox/api/media/8038',
+   'o:id': 8038}],
+ 'o:item_set': [],
+ 'o:site': [{'@id': 'https://omekas.aws.ldas.jp/sandbox/api/sites/1',
+   'o:id': 1},
+  {'@id': 'https://omekas.aws.ldas.jp/sandbox/api/sites/2', 'o:id': 2}],
+ 'schema:name': [{'type': 'literal',
+   'property_id': 2922,
+   'property_label': 'name',
+   'is_public': True,
+   '@value': "MR nakamura196'S PREDICTION. RENEWAL OF CYCLONE FORETOLD."}],
+ 'schema:datePublished': [{'type': 'literal',
+   'property_id': 2027,
+   'property_label': 'datePublished',
+   'is_public': True,
+   '@value': '1918-03-14'}],
+ 'schema:url': [{'type': 'literal',
+   'property_id': 2995,
+   'property_label': 'url',
+   'is_public': True,
+   '@value': 'http://nla.gov.au/nla.news-article226799674'}]}</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
